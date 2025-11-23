@@ -8,6 +8,7 @@
 <div
   class="spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} featured-product-purchase-section"
   style="{% render 'spacing-padding', settings: section.settings %}"
+  data-section-id="{{ section.id }}"
 >
   {% if product != blank %}
     <div class="featured-product-container">
@@ -88,7 +89,6 @@
           <button
             type="button"
             class="add-to-cart-btn"
-            data-section-id="{{ section.id }}"
             data-variant-id="{{ selected_variant.id }}"
           >
             {{ section.settings.add_to_cart_text }}
@@ -380,48 +380,71 @@
 </style>
 
 <script>
-  (function() {
-    const section = document.querySelector('[data-section-id="{{ section.id }}"]').closest('.featured-product-purchase-section');
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.querySelector('[data-section-id="{{ section.id }}"]');
+
+    if (!section) {
+      console.error('Section not found');
+      return;
+    }
+
     const addToCartBtn = section.querySelector('.add-to-cart-btn');
 
-    if (addToCartBtn) {
-      addToCartBtn.addEventListener('click', function() {
-        const sectionId = this.getAttribute('data-section-id');
-        const variantId = this.getAttribute('data-variant-id');
-        const selectedRadio = section.querySelector('input[name="quantity-{{ section_id }}"]:checked');
-
-        if (!selectedRadio) {
-          alert('{{ section.settings.select_option_text }}');
-          return;
-        }
-
-        const quantity = parseInt(selectedRadio.value);
-
-        const formData = {
-          items: [{
-            id: parseInt(variantId),
-            quantity: quantity
-          }]
-        };
-
-        fetch('/cart/add.js', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(data => {
-          window.location.href = '/cart';
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          alert('{{ section.settings.error_text }}');
-        });
-      });
+    if (!addToCartBtn) {
+      console.error('Add to cart button not found');
+      return;
     }
-  })();
+
+    console.log('Add to cart initialized for section {{ section.id }}');
+
+    addToCartBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('Add to cart clicked');
+
+      const variantId = this.getAttribute('data-variant-id');
+      const selectedRadio = section.querySelector('input[name="quantity-{{ section_id }}"]:checked');
+
+      console.log('Variant ID:', variantId);
+      console.log('Selected radio:', selectedRadio);
+
+      if (!selectedRadio) {
+        alert('{{ section.settings.select_option_text }}');
+        return;
+      }
+
+      const quantity = parseInt(selectedRadio.value);
+      console.log('Quantity:', quantity);
+
+      const formData = {
+        items: [{
+          id: parseInt(variantId),
+          quantity: quantity
+        }]
+      };
+
+      console.log('Sending to cart:', formData);
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(response => {
+        console.log('Response status:', response.status);
+        return response.json();
+      })
+      .then(data => {
+        console.log('Cart response:', data);
+        window.location.href = '/cart';
+      })
+      .catch((error) => {
+        console.error('Error adding to cart:', error);
+        alert('{{ section.settings.error_text }}');
+      });
+    });
+  });
 </script>
 
 {% schema %}
