@@ -491,6 +491,7 @@
           "settings": {
             "source": "uploaded",
             "video": "shopify://files/videos/95a55d251f45484192b5d80521de6a15.HD-1080p-2.5Mbps-61610790.mp4",
+            "video_url": "",
             "video_autoplay": true,
             "video_loop": true,
             "video_controls": false,
@@ -503,6 +504,7 @@
           "settings": {
             "source": "uploaded",
             "video": "shopify://files/videos/95a55d251f45484192b5d80521de6a15.HD-1080p-2.5Mbps-61610790.mp4",
+            "video_url": "",
             "video_autoplay": true,
             "video_loop": true,
             "video_controls": false,
@@ -515,6 +517,7 @@
           "settings": {
             "source": "uploaded",
             "video": "shopify://files/videos/95a55d251f45484192b5d80521de6a15.HD-1080p-2.5Mbps-61610790.mp4",
+            "video_url": "",
             "video_autoplay": true,
             "video_loop": true,
             "video_controls": false,
@@ -534,13 +537,41 @@
             "alt": "",
             "caption": ""
           }
+        },
+        "video_VHbTA4": {
+          "type": "video",
+          "settings": {
+            "source": "uploaded",
+            "video": "shopify://files/videos/95a55d251f45484192b5d80521de6a15.HD-1080p-2.5Mbps-61610790.mp4",
+            "video_url": "",
+            "video_autoplay": true,
+            "video_loop": true,
+            "video_controls": false,
+            "alt": "",
+            "caption": ""
+          }
+        },
+        "video_gypwp9": {
+          "type": "video",
+          "settings": {
+            "source": "uploaded",
+            "video": "shopify://files/videos/95a55d251f45484192b5d80521de6a15.HD-1080p-2.5Mbps-61610790.mp4",
+            "video_url": "",
+            "video_autoplay": true,
+            "video_loop": true,
+            "video_controls": false,
+            "alt": "",
+            "caption": ""
+          }
         }
       },
       "block_order": [
         "video_rHCP3H",
         "video_ybedRj",
         "video_69PgwM",
-        "video_pxVPVA"
+        "video_pxVPVA",
+        "video_VHbTA4",
+        "video_gypwp9"
       ],
       "name": "Video Slider Carousel",
       "settings": {
@@ -548,12 +579,12 @@
         "heading_alignment": "center",
         "slides_per_view": 3,
         "slides_per_view_mobile": 1,
+        "center_slide_scale": 1.2,
         "gap": 20,
         "video_aspect_ratio": "9/16",
         "border_radius": 8,
         "icons_style": "arrow",
         "show_pagination": true,
-        "slideshow_controls_style": "dots",
         "color_scheme": "",
         "autoplay": true,
         "autoplay_speed": 5,
