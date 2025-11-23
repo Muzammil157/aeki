@@ -1269,7 +1269,7 @@
         "background_media": "image",
         "video_position": "cover",
         "background_image": "shopify://shop_images/ChatGPT_Image_Nov_23_2025_06_27_59_AM.png",
-        "background_image_position": "cover",
+        "background_image_position": "fit",
         "border": "none",
         "border_width": 1,
         "border_opacity": 100,
