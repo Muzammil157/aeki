@@ -386,6 +386,7 @@
 
   if (button) {
     button.addEventListener('click', function() {
+      console.log('clicked!');
       var variantId = this.getAttribute('data-variant-id');
       var selectedRadio = document.querySelector('input[name="quantity-{{ section_id }}"]:checked');
 
