@@ -381,7 +381,7 @@
 </style>
 
 <script>
-
+(function() {
   let button = document.getElementById('add-to-cart-{{ section.id }}');
   console.log('script started!');
   if (button) {
@@ -421,12 +421,13 @@
       })
       .catch(function(error) {
         console.error('Error:', error);
-        alert('{{ section.settings.error_text }}');
+        alert('error occured');
         button.disabled = false;
         button.textContent = '{{ section.settings.add_to_cart_text }}';
       });
     });
   }
+})();
 </script>
 
 {% schema %}
