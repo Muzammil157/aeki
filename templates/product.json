@@ -1549,6 +1549,69 @@
         "padding-block-start": 24,
         "padding-block-end": 24
       }
+    },
+    "product_comparison_y7tNjk": {
+      "type": "product-comparison",
+      "blocks": {
+        "feature_LW3fpQ": {
+          "type": "feature",
+          "settings": {
+            "feature": "Poils ultra-doux, sans danger pour la peau",
+            "brand_has": true,
+            "competitor_has": false
+          }
+        },
+        "feature_bU33dL": {
+          "type": "feature",
+          "settings": {
+            "feature": "Design ergonomique, anti-rayures",
+            "brand_has": true,
+            "competitor_has": false
+          }
+        },
+        "feature_EPYUVi": {
+          "type": "feature",
+          "settings": {
+            "feature": "Matériaux premium sans odeur",
+            "brand_has": true,
+            "competitor_has": false
+          }
+        },
+        "feature_yehkPR": {
+          "type": "feature",
+          "settings": {
+            "feature": "Drainage lymphatique efficace",
+            "brand_has": true,
+            "competitor_has": false
+          }
+        },
+        "feature_iCVAM7": {
+          "type": "feature",
+          "settings": {
+            "feature": "Livré avec étui de rangement",
+            "brand_has": true,
+            "competitor_has": false
+          }
+        }
+      },
+      "block_order": [
+        "feature_LW3fpQ",
+        "feature_bU33dL",
+        "feature_EPYUVi",
+        "feature_yehkPR",
+        "feature_iCVAM7"
+      ],
+      "name": "Comparaison de Produit",
+      "settings": {
+        "brand_name": "MAYKARDI",
+        "competitor_name": "Autres",
+        "heading": "La raison pour laquelle les outils Gua Sha disparaissent",
+        "description": "Parce que sculpter, dégonfler et faire briller la peau ne devrait pas signifier des soins coûteux ou des outils agressifs.",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 50,
+        "padding-block-end": 50
+      }
     }
   },
   "order": [
@@ -1560,6 +1623,7 @@
     "section_UhNgJN",
     "section_pijjhJ",
     "customer_statistics_WhwPNJ",
-    "product_recommendations_dDfQTx"
+    "product_recommendations_dDfQTx",
+    "product_comparison_y7tNjk"
   ]
 }
