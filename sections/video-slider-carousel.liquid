@@ -119,29 +119,31 @@
   }
 
   .video-slider-carousel__wrapper {
-    display: grid;
-    grid-template-columns: repeat(var(--slides-per-view-mobile, 1), 1fr);
+    display: flex;
     gap: {{ section.settings.gap }}px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    padding-bottom: 10px;
   }
 
   .video-slider-carousel__wrapper::-webkit-scrollbar {
     display: none;
   }
 
-  @media screen and (min-width: 750px) {
-    .video-slider-carousel__wrapper {
-      grid-template-columns: repeat(var(--slides-per-view, 3), 1fr);
-    }
-  }
-
   .video-slider-carousel__slide {
+    flex: 0 0 calc((100% - ({{ section.settings.gap }}px * ({{ section.settings.slides_per_view_mobile }} - 1))) / {{ section.settings.slides_per_view_mobile }});
     scroll-snap-align: start;
     position: relative;
+    min-width: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .video-slider-carousel__slide {
+      flex: 0 0 calc((100% - ({{ section.settings.gap }}px * ({{ section.settings.slides_per_view }} - 1))) / {{ section.settings.slides_per_view }});
+    }
   }
 
   .video-slider-carousel__video-wrapper {
@@ -175,6 +177,7 @@
     justify-content: space-between;
     pointer-events: none;
     padding: 0 20px;
+    z-index: 10;
   }
 
   .video-slider-carousel__navigation > * {
@@ -204,8 +207,9 @@
       super();
       this.wrapper = this.querySelector('.video-slider-carousel__wrapper');
       this.slides = this.querySelectorAll('.video-slider-carousel__slide');
-      this.prevBtn = this.querySelector('.slideshow-arrow--previous');
-      this.nextBtn = this.querySelector('.slideshow-arrow--next');
+      this.navigation = this.querySelector('.video-slider-carousel__navigation');
+
+      if (!this.wrapper || this.slides.length === 0) return;
 
       this.currentIndex = 0;
       this.slidesPerView = parseInt(this.wrapper.dataset.slidesPerView) || 3;
@@ -217,51 +221,83 @@
     }
 
     init() {
-      if (this.prevBtn) {
-        this.prevBtn.addEventListener('click', () => this.prev());
-      }
+      // Wait for navigation to be rendered
+      setTimeout(() => {
+        this.prevBtn = this.querySelector('.slideshow-arrow--previous');
+        this.nextBtn = this.querySelector('.slideshow-arrow--next');
 
-      if (this.nextBtn) {
-        this.nextBtn.addEventListener('click', () => this.next());
-      }
+        if (this.prevBtn) {
+          this.prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.prev();
+          });
+        }
+
+        if (this.nextBtn) {
+          this.nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.next();
+          });
+        }
+      }, 100);
 
       if (this.autoplay) {
         this.startAutoplay();
       }
 
-      this.updateCSS();
-      window.addEventListener('resize', () => this.updateCSS());
+      // Handle window resize
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          this.currentIndex = 0;
+          this.wrapper.scrollLeft = 0;
+        }, 250);
+      });
+
+      // Enable touch/swipe on mobile
+      this.wrapper.addEventListener('scroll', () => {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+          if (this.autoplay) {
+            setTimeout(() => this.startAutoplay(), 3000);
+          }
+        }
+      });
     }
 
-    updateCSS() {
-      const isMobile = window.innerWidth < 750;
-      const slidesPerView = isMobile ? this.slidesPerViewMobile : this.slidesPerView;
-      this.wrapper.style.setProperty('--slides-per-view', this.slidesPerView);
-      this.wrapper.style.setProperty('--slides-per-view-mobile', this.slidesPerViewMobile);
+    getCurrentSlidesPerView() {
+      return window.innerWidth < 750 ? this.slidesPerViewMobile : this.slidesPerView;
     }
 
     prev() {
-      const isMobile = window.innerWidth < 750;
-      const slidesPerView = isMobile ? this.slidesPerViewMobile : this.slidesPerView;
+      const slidesPerView = this.getCurrentSlidesPerView();
 
       if (this.currentIndex > 0) {
         this.currentIndex--;
-        this.scroll();
+      } else {
+        // Loop to end
+        this.currentIndex = Math.max(0, this.slides.length - slidesPerView);
       }
+
+      this.scrollToIndex();
     }
 
     next() {
-      const isMobile = window.innerWidth < 750;
-      const slidesPerView = isMobile ? this.slidesPerViewMobile : this.slidesPerView;
-      const maxIndex = this.slides.length - slidesPerView;
+      const slidesPerView = this.getCurrentSlidesPerView();
+      const maxIndex = Math.max(0, this.slides.length - slidesPerView);
 
       if (this.currentIndex < maxIndex) {
         this.currentIndex++;
-        this.scroll();
+      } else {
+        // Loop to start
+        this.currentIndex = 0;
       }
+
+      this.scrollToIndex();
     }
 
-    scroll() {
+    scrollToIndex() {
       if (this.slides[this.currentIndex]) {
         this.slides[this.currentIndex].scrollIntoView({
           behavior: 'smooth',
@@ -272,28 +308,24 @@
     }
 
     startAutoplay() {
-      this.autoplayInterval = setInterval(() => {
-        const isMobile = window.innerWidth < 750;
-        const slidesPerView = isMobile ? this.slidesPerViewMobile : this.slidesPerView;
-        const maxIndex = this.slides.length - slidesPerView;
+      if (this.autoplayInterval) {
+        clearInterval(this.autoplayInterval);
+      }
 
-        if (this.currentIndex < maxIndex) {
-          this.next();
-        } else {
-          this.currentIndex = 0;
-          this.scroll();
-        }
+      this.autoplayInterval = setInterval(() => {
+        this.next();
       }, this.autoplaySpeed);
     }
   }
 
-  customElements.define('video-slider-carousel', VideoSliderCarousel);
+  if (!customElements.get('video-slider-carousel')) {
+    customElements.define('video-slider-carousel', VideoSliderCarousel);
+  }
 {% endjavascript %}
 
 {% schema %}
 {
   "name": "Video Slider Carousel",
-  "tag": "video-slider-carousel",
   "class": "container-background-image",
   "blocks": [
     {
