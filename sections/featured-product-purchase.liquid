@@ -44,12 +44,6 @@
 
           <h1 class="product-title">{{ product.title }}</h1>
 
-          {% if section.settings.show_countdown and section.settings.countdown_text != blank %}
-            <div class="countdown-banner">
-              {{ section.settings.countdown_text }}
-            </div>
-          {% endif %}
-
           <div class="product-quantity-options">
             {% for block in section.blocks %}
               <div class="quantity-option" {{ block.shopify_attributes }}>
@@ -160,21 +154,7 @@
     font-size: 2.75rem;
     font-weight: 700;
     line-height: 1.1;
-    margin: 0 0 25px 0;
-    color: #8B4513;
-  }
-
-  .countdown-banner {
-    background: rgb(var(--color-background));
-    border-top: 2px solid rgba(var(--color-foreground), 0.2);
-    border-bottom: 2px solid rgba(var(--color-foreground), 0.2);
-    padding: 15px 0;
-    text-align: center;
-    font-weight: 700;
-    font-size: 0.8125rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 25px;
+    margin: 0 0 15px 0;
     color: #8B4513;
   }
 
@@ -183,6 +163,9 @@
     flex-direction: column;
     gap: 15px;
     margin-bottom: 30px;
+    background: rgba(139, 69, 19, 0.05);
+    padding: 20px;
+    border-radius: 12px;
   }
 
   .quantity-option {
