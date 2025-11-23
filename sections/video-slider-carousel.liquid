@@ -7,103 +7,94 @@
   if section.settings.icons_style == 'none' or section.blocks.size <= 1
     assign show_arrows = false
   endif
+  assign section_id = section.id
 %}
 
-{% if section.blocks.size > 1 %}
-  {% capture controls %}
-    {%- render 'slideshow-controls',
-      style: section.settings.slideshow_controls_style,
-      autoplay: section.settings.autoplay,
-      item_count: section.blocks.size,
-      show_arrows: false,
-      arrows_on_media: false,
-      controls_on_media: false,
-      pagination_position: 'center',
-      icon_style: section.settings.icons_style
-    -%}
-  {% endcapture %}
-{% endif %}
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
-  class="spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} video-slider-carousel"
+  class="spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} video-slider-carousel-section"
   style="{% render 'spacing-padding', settings: section.settings %}"
+  data-section-id="{{ section_id }}"
 >
   {% if heading != blank %}
-    <div class="video-slider-carousel__heading">
+    <div class="video-slider-carousel__heading" style="text-align: {{ section.settings.heading_alignment }};">
       <h2 class="video-slider-carousel__title">{{ heading }}</h2>
     </div>
   {% endif %}
 
   <div class="video-slider-carousel__container">
-    <div
-      class="video-slider-carousel__wrapper"
-      data-slides-per-view="{{ slides_per_view }}"
-      data-slides-per-view-mobile="{{ slides_per_view_mobile }}"
-      data-autoplay="{{ section.settings.autoplay }}"
-      data-autoplay-speed="{{ section.settings.autoplay_speed }}"
-    >
-      {% for block in section.blocks %}
-        <div class="video-slider-carousel__slide" {{ block.shopify_attributes }}>
-          <div class="video-slider-carousel__video-wrapper">
-            {% if block.settings.source == 'uploaded' %}
-              {% if block.settings.video != blank %}
-                {{
-                  block.settings.video
-                  | video_tag:
-                    autoplay: block.settings.video_autoplay,
-                    loop: block.settings.video_loop,
-                    controls: block.settings.video_controls,
-                    muted: true,
-                    class: 'video-slider-carousel__video'
-                }}
+    <!-- Swiper -->
+    <div class="swiper video-carousel-swiper-{{ section_id }}"
+         data-slides-per-view="{{ slides_per_view }}"
+         data-slides-per-view-mobile="{{ slides_per_view_mobile }}"
+         data-autoplay="{{ section.settings.autoplay }}"
+         data-autoplay-speed="{{ section.settings.autoplay_speed }}"
+         data-gap="{{ section.settings.gap }}"
+         data-center-scale="{{ section.settings.center_slide_scale }}">
+      <div class="swiper-wrapper">
+        {% for block in section.blocks %}
+          <div class="swiper-slide" {{ block.shopify_attributes }}>
+            <div class="video-slider-carousel__video-wrapper">
+              {% if block.settings.source == 'uploaded' %}
+                {% if block.settings.video != blank %}
+                  {{
+                    block.settings.video
+                    | video_tag:
+                      autoplay: block.settings.video_autoplay,
+                      loop: block.settings.video_loop,
+                      controls: block.settings.video_controls,
+                      muted: true,
+                      class: 'video-slider-carousel__video'
+                  }}
+                {% else %}
+                  {{ 'hero-apparel-1' | placeholder_svg_tag: 'video-slider-carousel__placeholder' }}
+                {% endif %}
+              {% elsif block.settings.video_url != blank %}
+                {% render 'video',
+                  video_from_url: true,
+                  video: block.settings.video_url.id,
+                  video_class: 'video-slider-carousel__video',
+                  video_type: block.settings.video_url.type,
+                  video_alt: block.settings.alt,
+                  video_preview_image: block.settings.cover_image,
+                  section_id: section.id
+                %}
               {% else %}
                 {{ 'hero-apparel-1' | placeholder_svg_tag: 'video-slider-carousel__placeholder' }}
               {% endif %}
-            {% elsif block.settings.video_url != blank %}
-              {% render 'video',
-                video_from_url: true,
-                video: block.settings.video_url.id,
-                video_class: 'video-slider-carousel__video',
-                video_type: block.settings.video_url.type,
-                video_alt: block.settings.alt,
-                video_preview_image: block.settings.cover_image,
-                section_id: section.id
-              %}
-            {% else %}
-              {{ 'hero-apparel-1' | placeholder_svg_tag: 'video-slider-carousel__placeholder' }}
+            </div>
+            {% if block.settings.caption != blank %}
+              <div class="video-slider-carousel__caption">
+                {{ block.settings.caption }}
+              </div>
             {% endif %}
           </div>
-          {% if block.settings.caption != blank %}
-            <div class="video-slider-carousel__caption">
-              {{ block.settings.caption }}
-            </div>
-          {% endif %}
-        </div>
-      {% endfor %}
+        {% endfor %}
+      </div>
+
+      <!-- Navigation arrows -->
+      {% if show_arrows %}
+        <div class="swiper-button-prev swiper-button-prev-{{ section_id }}"></div>
+        <div class="swiper-button-next swiper-button-next-{{ section_id }}"></div>
+      {% endif %}
+
+      <!-- Pagination -->
+      {% if section.settings.show_pagination %}
+        <div class="swiper-pagination swiper-pagination-{{ section_id }}"></div>
+      {% endif %}
     </div>
-
-    {% if show_arrows and section.blocks.size > slides_per_view %}
-      <div class="video-slider-carousel__navigation">
-        {% render 'slideshow-arrows', icon_style: section.settings.icons_style %}
-      </div>
-    {% endif %}
-
-    {% if section.settings.show_pagination and section.blocks.size > 1 %}
-      <div class="video-slider-carousel__controls">
-        {{ controls }}
-      </div>
-    {% endif %}
   </div>
 </div>
 
 {% stylesheet %}
-  .video-slider-carousel {
+  .video-slider-carousel-section {
     position: relative;
   }
 
   .video-slider-carousel__heading {
-    text-align: {{ section.settings.heading_alignment }};
     margin-bottom: 40px;
   }
 
@@ -115,35 +106,25 @@
 
   .video-slider-carousel__container {
     position: relative;
-    overflow: hidden;
+    overflow: visible;
   }
 
-  .video-slider-carousel__wrapper {
-    display: flex;
-    gap: {{ section.settings.gap }}px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 10px;
+  .video-carousel-swiper-{{ section_id }} {
+    overflow: visible;
+    padding: 20px 0 50px;
   }
 
-  .video-slider-carousel__wrapper::-webkit-scrollbar {
-    display: none;
+  .video-carousel-swiper-{{ section_id }} .swiper-wrapper {
+    align-items: center;
   }
 
-  .video-slider-carousel__slide {
-    flex: 0 0 calc((100% - ({{ section.settings.gap }}px * ({{ section.settings.slides_per_view_mobile }} - 1))) / {{ section.settings.slides_per_view_mobile }});
-    scroll-snap-align: start;
-    position: relative;
-    min-width: 0;
+  .video-carousel-swiper-{{ section_id }} .swiper-slide {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.6;
   }
 
-  @media screen and (min-width: 750px) {
-    .video-slider-carousel__slide {
-      flex: 0 0 calc((100% - ({{ section.settings.gap }}px * ({{ section.settings.slides_per_view }} - 1))) / {{ section.settings.slides_per_view }});
-    }
+  .video-carousel-swiper-{{ section_id }} .swiper-slide-active {
+    opacity: 1;
   }
 
   .video-slider-carousel__video-wrapper {
@@ -168,26 +149,41 @@
     font-size: 0.875rem;
   }
 
-  .video-slider-carousel__navigation {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    pointer-events: none;
-    padding: 0 20px;
-    z-index: 10;
+  /* Swiper Navigation Buttons */
+  .swiper-button-prev-{{ section_id }},
+  .swiper-button-next-{{ section_id }} {
+    color: rgba(var(--color-foreground), 0.75);
+    width: 44px;
+    height: 44px;
+    background: rgba(var(--color-background), 0.9);
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
-  .video-slider-carousel__navigation > * {
-    pointer-events: all;
+  .swiper-button-prev-{{ section_id }}:hover,
+  .swiper-button-next-{{ section_id }}:hover {
+    background: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
   }
 
-  .video-slider-carousel__controls {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
+  .swiper-button-prev-{{ section_id }}::after,
+  .swiper-button-next-{{ section_id }}::after {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  /* Swiper Pagination */
+  .swiper-pagination-{{ section_id }} {
+    bottom: 0 !important;
+  }
+
+  .swiper-pagination-{{ section_id }} .swiper-pagination-bullet {
+    background: rgb(var(--color-foreground));
+    opacity: 0.3;
+  }
+
+  .swiper-pagination-{{ section_id }} .swiper-pagination-bullet-active {
+    opacity: 1;
   }
 
   @media screen and (max-width: 749px) {
@@ -198,134 +194,104 @@
     .video-slider-carousel__heading {
       margin-bottom: 24px;
     }
+
+    .swiper-button-prev-{{ section_id }},
+    .swiper-button-next-{{ section_id }} {
+      width: 36px;
+      height: 36px;
+    }
+
+    .swiper-button-prev-{{ section_id }}::after,
+    .swiper-button-next-{{ section_id }}::after {
+      font-size: 16px;
+    }
   }
 {% endstylesheet %}
 
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
 {% javascript %}
-  class VideoSliderCarousel extends HTMLElement {
-    constructor() {
-      super();
-      this.wrapper = this.querySelector('.video-slider-carousel__wrapper');
-      this.slides = this.querySelectorAll('.video-slider-carousel__slide');
-      this.navigation = this.querySelector('.video-slider-carousel__navigation');
+  document.addEventListener('DOMContentLoaded', function() {
+    const sectionId = '{{ section_id }}';
+    const swiperEl = document.querySelector('.video-carousel-swiper-' + sectionId);
 
-      if (!this.wrapper || this.slides.length === 0) return;
+    if (!swiperEl) return;
 
-      this.currentIndex = 0;
-      this.slidesPerView = parseInt(this.wrapper.dataset.slidesPerView) || 3;
-      this.slidesPerViewMobile = parseInt(this.wrapper.dataset.slidesPerViewMobile) || 1;
-      this.autoplay = this.wrapper.dataset.autoplay === 'true';
-      this.autoplaySpeed = (parseInt(this.wrapper.dataset.autoplaySpeed) || 4) * 1000;
+    const slidesPerView = parseInt(swiperEl.dataset.slidesPerView) || 3;
+    const slidesPerViewMobile = parseInt(swiperEl.dataset.slidesPerViewMobile) || 1;
+    const autoplay = swiperEl.dataset.autoplay === 'true';
+    const autoplaySpeed = (parseInt(swiperEl.dataset.autoplaySpeed) || 5) * 1000;
+    const gap = parseInt(swiperEl.dataset.gap) || 20;
+    const centerScale = parseFloat(swiperEl.dataset.centerScale) || 1.2;
 
-      this.init();
-    }
+    const swiper = new Swiper('.video-carousel-swiper-' + sectionId, {
+      slidesPerView: slidesPerViewMobile,
+      spaceBetween: gap,
+      centeredSlides: true,
+      loop: true,
+      grabCursor: true,
 
-    init() {
-      // Wait for navigation to be rendered
-      setTimeout(() => {
-        this.prevBtn = this.querySelector('.slideshow-arrow--previous');
-        this.nextBtn = this.querySelector('.slideshow-arrow--next');
+      // Autoplay
+      autoplay: autoplay ? {
+        delay: autoplaySpeed,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      } : false,
 
-        if (this.prevBtn) {
-          this.prevBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.prev();
-          });
+      // Navigation arrows
+      navigation: {
+        nextEl: '.swiper-button-next-' + sectionId,
+        prevEl: '.swiper-button-prev-' + sectionId,
+      },
+
+      // Pagination
+      pagination: {
+        el: '.swiper-pagination-' + sectionId,
+        clickable: true,
+      },
+
+      // Responsive breakpoints
+      breakpoints: {
+        750: {
+          slidesPerView: slidesPerView,
+          spaceBetween: gap,
         }
+      },
 
-        if (this.nextBtn) {
-          this.nextBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.next();
-          });
+      // Center slide effect
+      on: {
+        init: function() {
+          updateSlideScale(this);
+        },
+        slideChange: function() {
+          updateSlideScale(this);
+        },
+        transitionEnd: function() {
+          updateSlideScale(this);
         }
-      }, 100);
-
-      if (this.autoplay) {
-        this.startAutoplay();
       }
+    });
 
-      // Handle window resize
-      let resizeTimer;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-          this.currentIndex = 0;
-          this.wrapper.scrollLeft = 0;
-        }, 250);
+    function updateSlideScale(swiper) {
+      const slides = swiper.slides;
+      slides.forEach((slide, index) => {
+        if (slide.classList.contains('swiper-slide-active')) {
+          slide.style.transform = 'scale(' + centerScale + ')';
+          slide.style.zIndex = '10';
+        } else {
+          slide.style.transform = 'scale(1)';
+          slide.style.zIndex = '1';
+        }
       });
-
-      // Enable touch/swipe on mobile
-      this.wrapper.addEventListener('scroll', () => {
-        if (this.autoplayInterval) {
-          clearInterval(this.autoplayInterval);
-          if (this.autoplay) {
-            setTimeout(() => this.startAutoplay(), 3000);
-          }
-        }
-      });
     }
-
-    getCurrentSlidesPerView() {
-      return window.innerWidth < 750 ? this.slidesPerViewMobile : this.slidesPerView;
-    }
-
-    prev() {
-      const slidesPerView = this.getCurrentSlidesPerView();
-
-      if (this.currentIndex > 0) {
-        this.currentIndex--;
-      } else {
-        // Loop to end
-        this.currentIndex = Math.max(0, this.slides.length - slidesPerView);
-      }
-
-      this.scrollToIndex();
-    }
-
-    next() {
-      const slidesPerView = this.getCurrentSlidesPerView();
-      const maxIndex = Math.max(0, this.slides.length - slidesPerView);
-
-      if (this.currentIndex < maxIndex) {
-        this.currentIndex++;
-      } else {
-        // Loop to start
-        this.currentIndex = 0;
-      }
-
-      this.scrollToIndex();
-    }
-
-    scrollToIndex() {
-      if (this.slides[this.currentIndex]) {
-        this.slides[this.currentIndex].scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'start'
-        });
-      }
-    }
-
-    startAutoplay() {
-      if (this.autoplayInterval) {
-        clearInterval(this.autoplayInterval);
-      }
-
-      this.autoplayInterval = setInterval(() => {
-        this.next();
-      }, this.autoplaySpeed);
-    }
-  }
-
-  if (!customElements.get('video-slider-carousel')) {
-    customElements.define('video-slider-carousel', VideoSliderCarousel);
-  }
+  });
 {% endjavascript %}
 
 {% schema %}
 {
   "name": "Video Slider Carousel",
+  "tag": "section",
   "class": "container-background-image",
   "blocks": [
     {
@@ -433,7 +399,8 @@
       "min": 1,
       "max": 5,
       "step": 1,
-      "default": 3
+      "default": 3,
+      "info": "Number of slides visible at once on desktop"
     },
     {
       "type": "range",
@@ -442,7 +409,18 @@
       "min": 1,
       "max": 3,
       "step": 1,
-      "default": 1
+      "default": 1,
+      "info": "Number of slides visible at once on mobile"
+    },
+    {
+      "type": "range",
+      "id": "center_slide_scale",
+      "label": "Center Slide Scale",
+      "min": 1.0,
+      "max": 1.5,
+      "step": 0.1,
+      "default": 1.2,
+      "info": "How much bigger the center slide should be (1.0 = no scaling)"
     },
     {
       "type": "range",
@@ -494,49 +472,21 @@
       "label": "Navigation Arrows",
       "options": [
         {
-          "value": "arrow",
-          "label": "Arrows"
-        },
-        {
-          "value": "chevron",
-          "label": "Chevrons"
-        },
-        {
-          "value": "arrows_large",
-          "label": "Large Arrows"
-        },
-        {
-          "value": "chevron_large",
-          "label": "Large Chevrons"
+          "value": "show",
+          "label": "Show"
         },
         {
           "value": "none",
           "label": "None"
         }
       ],
-      "default": "arrow"
+      "default": "show"
     },
     {
       "type": "checkbox",
       "id": "show_pagination",
-      "label": "Show Pagination",
+      "label": "Show Pagination Dots",
       "default": true
-    },
-    {
-      "type": "select",
-      "id": "slideshow_controls_style",
-      "label": "Pagination Style",
-      "options": [
-        {
-          "value": "dots",
-          "label": "Dots"
-        },
-        {
-          "value": "counter",
-          "label": "Counter"
-        }
-      ],
-      "default": "dots"
     },
     {
       "type": "color_scheme",
