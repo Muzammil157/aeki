@@ -1,0 +1,232 @@
+{% liquid
+  assign section_id = section.id | replace: '-', '_'
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} customer-statistics-section"
+  style="{% render 'spacing-padding', settings: section.settings %}"
+>
+  <div class="customer-statistics-container">
+    {% for block in section.blocks %}
+      <div class="customer-statistics-item" {{ block.shopify_attributes }}>
+        <div class="statistics-circle">
+          <span class="statistics-percentage">{{ block.settings.percentage }}%</span>
+        </div>
+        <div class="statistics-text">
+          {{ block.settings.description }}
+        </div>
+      </div>
+    {% endfor %}
+
+    {% if section.settings.disclaimer != blank %}
+      <div class="statistics-disclaimer">
+        {{ section.settings.disclaimer }}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .customer-statistics-section {
+    position: relative;
+  }
+
+  .customer-statistics-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .customer-statistics-item {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 30px 0;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+
+  .customer-statistics-item:last-of-type {
+    border-bottom: none;
+  }
+
+  .statistics-circle {
+    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 8px solid rgb(var(--color-foreground));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(var(--color-background));
+  }
+
+  .statistics-percentage {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .statistics-text {
+    flex: 1;
+    font-size: 1.25rem;
+    line-height: 1.5;
+  }
+
+  .statistics-disclaimer {
+    margin-top: 40px;
+    font-size: 0.875rem;
+    color: rgba(var(--color-foreground), 0.7);
+    font-style: italic;
+  }
+
+  @media screen and (max-width: 749px) {
+    .customer-statistics-item {
+      gap: 20px;
+      padding: 20px 0;
+    }
+
+    .statistics-circle {
+      width: 90px;
+      height: 90px;
+      border: 6px solid rgb(var(--color-foreground));
+    }
+
+    .statistics-percentage {
+      font-size: 1.75rem;
+    }
+
+    .statistics-text {
+      font-size: 1rem;
+    }
+
+    .statistics-disclaimer {
+      margin-top: 30px;
+      font-size: 0.8125rem;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Statistiques Clients",
+  "tag": "section",
+  "class": "customer-statistics",
+  "blocks": [
+    {
+      "type": "statistic",
+      "name": "Statistique",
+      "settings": [
+        {
+          "type": "range",
+          "id": "percentage",
+          "label": "Pourcentage",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 89
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Ont remarqué une réduction des poches et des gonflements après la première semaine d'utilisation."
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "disclaimer",
+      "label": "Mention légale",
+      "default": "*Basé sur une enquête auprès de 527 clients après 30 jours d'utilisation"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Palette de couleurs",
+      "default": "primary"
+    },
+    {
+      "type": "header",
+      "content": "Largeur de la section"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Largeur",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Largeur de page"
+        },
+        {
+          "value": "full-width",
+          "label": "Pleine largeur"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Espacement"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Haut",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bas",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "Statistiques Clients",
+      "category": "Témoignages",
+      "blocks": [
+        {
+          "type": "statistic",
+          "settings": {
+            "percentage": 89,
+            "description": "Ont remarqué une réduction des poches et des gonflements après la première semaine d'utilisation."
+          }
+        },
+        {
+          "type": "statistic",
+          "settings": {
+            "percentage": 94,
+            "description": "Ont signalé une mâchoire plus définie et un aspect sculpté grâce à un brossage régulier."
+          }
+        },
+        {
+          "type": "statistic",
+          "settings": {
+            "percentage": 91,
+            "description": "Ont déclaré que leur peau semblait plus saine, plus lisse et plus radieuse avec une utilisation quotidienne."
+          }
+        }
+      ],
+      "settings": {
+        "disclaimer": "*Basé sur une enquête auprès de 527 clients après 30 jours d'utilisation"
+      }
+    }
+  ]
+}
+{% endschema %}
