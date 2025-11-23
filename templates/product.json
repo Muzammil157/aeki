@@ -1414,6 +1414,67 @@
         "padding-block-start": 50,
         "padding-block-end": 50
       }
+    },
+    "customer_reviews_MPUDVg": {
+      "type": "customer-reviews",
+      "blocks": {
+        "review_LNa6Qy": {
+          "type": "review",
+          "settings": {
+            "name": "Tina M. Scott",
+            "time_ago": "1w ago",
+            "review_text": "Je viens de recevoir cette brosse il y a une semaine. La différence que je peux voir sur mon visage est incroyable. J'aime l'utiliser avant d'aller me coucher et après m'être lavé le visage le matin avant d'hydrater. HAUTEMENT RECOMMANDÉ",
+            "reactions": "1.2k",
+            "comments": "32",
+            "like_label": "J'aime",
+            "comment_label": "Commenter",
+            "share_label": "Partager",
+            "comments_label": "Commentaires"
+          }
+        },
+        "review_Q8eXtA": {
+          "type": "review",
+          "settings": {
+            "name": "Heather Peterson",
+            "time_ago": "1w ago",
+            "review_text": "Ça marche!! Je promets ❤️ C'est une technique de brossage à sec. J'hydrate avec de l'huile de ricin et de l'huile de vitamine E après.",
+            "reactions": "524",
+            "comments": "15",
+            "like_label": "J'aime",
+            "comment_label": "Commenter",
+            "share_label": "Partager",
+            "comments_label": "Commentaires"
+          }
+        },
+        "review_3XgbRE": {
+          "type": "review",
+          "settings": {
+            "name": "Janet Malone",
+            "time_ago": "2w ago",
+            "review_text": "J'en ai 2 !!! J'adore à quel point elle est super douce et elle réduit vraiment les poches, l'affaissement de la mâchoire et les ridules. Hautement recommandé !",
+            "reactions": "384",
+            "comments": "26",
+            "like_label": "J'aime",
+            "comment_label": "Commenter",
+            "share_label": "Partager",
+            "comments_label": "Commentaires"
+          }
+        }
+      },
+      "block_order": [
+        "review_LNa6Qy",
+        "review_Q8eXtA",
+        "review_3XgbRE"
+      ],
+      "name": "Customer Reviews",
+      "settings": {
+        "heading": "Écoutez nos clients",
+        "subtitle": "Cette brosse a aidé des milliers de femmes à éliminer les poches du visage, sculpter leur mâchoire et obtenir un look rafraîchi à la maison.",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 50,
+        "padding-block-end": 50
+      }
     }
   },
   "order": [
@@ -1425,6 +1486,7 @@
     "section_UhNgJN",
     "section_pijjhJ",
     "customer_statistics_WhwPNJ",
-    "product_comparison_y7tNjk"
+    "product_comparison_y7tNjk",
+    "customer_reviews_MPUDVg"
   ]
 }
