@@ -22,11 +22,11 @@
             </div>
             {% if section.settings.show_guarantee_badge %}
               <div class="guarantee-badge">
-                <svg width="60" height="60" viewBox="0 0 100 100" fill="none">
-                  <circle cx="50" cy="50" r="45" fill="#FFD700" stroke="#000" stroke-width="2"/>
-                  <path d="M50 20L55 35L70 35L58 45L63 60L50 50L37 60L42 45L30 35L45 35L50 20Z" fill="#000"/>
+                <svg width="80" height="80" viewBox="0 0 100 100" fill="none">
+                  <circle cx="50" cy="50" r="48" fill="#FFD700" stroke="#000" stroke-width="2"/>
+                  <path d="M50 15L57 35L78 35L61 48L68 68L50 55L32 68L39 48L22 35L43 35L50 15Z" fill="#000"/>
                 </svg>
-                <span class="badge-text">{{ section.settings.guarantee_text }}</span>
+                <div class="badge-text">{{ section.settings.guarantee_text }}</div>
               </div>
             {% endif %}
           </div>
@@ -52,7 +52,7 @@
             <div class="product-rating">
               <div class="rating-stars">
                 {% for i in (1..5) %}
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                   </svg>
                 {% endfor %}
@@ -69,34 +69,35 @@
             </div>
           {% endif %}
 
-          <div class="product-variants-list">
-            {% for variant in product.variants %}
-              <div class="variant-option" data-variant-id="{{ variant.id }}">
+          <div class="product-quantity-options">
+            {% for block in section.blocks %}
+              <div class="quantity-option" {{ block.shopify_attributes }}>
                 <input
                   type="radio"
-                  name="variant-{{ section_id }}"
-                  id="variant-{{ variant.id }}"
-                  value="{{ variant.id }}"
-                  {% if variant == selected_variant %}checked{% endif %}
-                  {% unless variant.available %}disabled{% endunless %}
-                  class="variant-radio"
+                  name="quantity-{{ section_id }}"
+                  id="quantity-{{ block.id }}"
+                  value="{{ block.settings.quantity }}"
+                  data-price="{{ block.settings.price }}"
+                  data-compare-price="{{ block.settings.compare_price }}"
+                  {% if forloop.first %}checked{% endif %}
+                  class="quantity-radio"
                 >
-                <label for="variant-{{ variant.id }}" class="variant-label">
-                  <div class="variant-info">
-                    <div class="variant-title">{{ variant.title }}</div>
-                    {% if variant.compare_at_price > variant.price %}
-                      <div class="variant-savings">
-                        {{ section.settings.save_text }} {{ variant.compare_at_price | minus: variant.price | money }}
+                <label for="quantity-{{ block.id }}" class="quantity-label">
+                  <div class="quantity-info">
+                    <div class="quantity-title">{{ block.settings.quantity_label }}</div>
+                    {% if block.settings.show_savings and block.settings.compare_price > block.settings.price %}
+                      <div class="quantity-savings">
+                        {{ section.settings.save_text }} {{ block.settings.compare_price | minus: block.settings.price | money }}
                       </div>
                     {% endif %}
-                    {% if section.settings.free_shipping_variants contains variant.title %}
+                    {% if block.settings.show_free_shipping %}
                       <div class="free-shipping-badge">{{ section.settings.free_shipping_text }}</div>
                     {% endif %}
                   </div>
-                  <div class="variant-pricing">
-                    <div class="variant-price">{{ variant.price | money }}</div>
-                    {% if variant.compare_at_price > variant.price %}
-                      <div class="variant-compare-price">{{ variant.compare_at_price | money }}</div>
+                  <div class="quantity-pricing">
+                    <div class="quantity-price">{{ block.settings.price | money }}</div>
+                    {% if block.settings.show_savings and block.settings.compare_price > block.settings.price %}
+                      <div class="quantity-compare-price">{{ block.settings.compare_price | money }}</div>
                     {% endif %}
                   </div>
                 </label>
@@ -107,7 +108,6 @@
           <button
             type="button"
             class="add-to-cart-btn"
-            data-product-id="{{ product.id }}"
             onclick="addToCart_{{ section_id }}()"
           >
             {{ section.settings.add_to_cart_text }}
@@ -149,7 +149,7 @@
     background: rgb(var(--color-background));
     border: 3px solid rgb(var(--color-foreground));
     border-radius: 50px;
-    padding: 15px 30px;
+    padding: 18px 30px;
     margin-bottom: 30px;
     display: inline-flex;
     align-items: center;
@@ -164,32 +164,43 @@
   }
 
   .banner-icon {
-    width: 60px;
+    width: 50px;
     height: auto;
     flex-shrink: 0;
   }
 
   .banner-text {
     font-weight: 700;
-    font-size: 1.125rem;
+    font-size: 1rem;
     line-height: 1.3;
+    text-transform: uppercase;
   }
 
   .guarantee-badge {
     position: absolute;
-    top: -15px;
-    right: -15px;
+    top: -20px;
+    right: -25px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
 
+  .guarantee-badge svg {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+
   .badge-text {
-    font-size: 0.625rem;
-    font-weight: 700;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.5rem;
+    font-weight: 900;
     text-transform: uppercase;
-    margin-top: -5px;
+    max-width: 55px;
+    line-height: 1.1;
+    margin-top: 2px;
   }
 
   .product-image-wrapper {
@@ -217,15 +228,17 @@
   }
 
   .rating-text {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     font-weight: 600;
+    color: rgba(var(--color-foreground), 0.8);
   }
 
   .product-title {
-    font-size: 2.5rem;
+    font-size: 2.75rem;
     font-weight: 700;
-    line-height: 1.2;
-    margin: 0 0 20px 0;
+    line-height: 1.1;
+    margin: 0 0 25px 0;
+    color: #8B4513;
   }
 
   .countdown-banner {
@@ -235,70 +248,69 @@
     padding: 15px 0;
     text-align: center;
     font-weight: 700;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    color: #8B4513;
   }
 
-  .product-variants-list {
+  .product-quantity-options {
     display: flex;
     flex-direction: column;
     gap: 15px;
     margin-bottom: 30px;
   }
 
-  .variant-option {
+  .quantity-option {
     position: relative;
   }
 
-  .variant-radio {
+  .quantity-radio {
     position: absolute;
     opacity: 0;
     pointer-events: none;
   }
 
-  .variant-label {
+  .quantity-label {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 25px;
-    border: 2px solid rgba(var(--color-foreground), 0.2);
+    border: 2px solid rgba(var(--color-foreground), 0.25);
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
+    background: rgb(var(--color-background));
   }
 
-  .variant-radio:checked + .variant-label {
+  .quantity-radio:checked + .quantity-label {
     border-color: rgb(var(--color-foreground));
     border-width: 3px;
     background: rgba(var(--color-foreground), 0.03);
   }
 
-  .variant-radio:disabled + .variant-label {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .variant-label:hover:not(.variant-radio:disabled + .variant-label) {
+  .quantity-label:hover {
     border-color: rgba(var(--color-foreground), 0.5);
   }
 
-  .variant-info {
+  .quantity-info {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
   }
 
-  .variant-title {
+  .quantity-title {
     font-weight: 700;
     font-size: 1.125rem;
+    color: rgb(var(--color-foreground));
   }
 
-  .variant-savings {
+  .quantity-savings {
     font-size: 0.875rem;
     color: #16a34a;
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: uppercase;
   }
 
   .free-shipping-badge {
@@ -306,47 +318,52 @@
     font-weight: 600;
     font-style: italic;
     color: rgba(var(--color-foreground), 0.7);
+    text-transform: uppercase;
   }
 
-  .variant-pricing {
+  .quantity-pricing {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 5px;
   }
 
-  .variant-price {
-    font-size: 1.5rem;
+  .quantity-price {
+    font-size: 1.75rem;
     font-weight: 700;
+    color: rgb(var(--color-foreground));
   }
 
-  .variant-compare-price {
-    font-size: 1rem;
+  .quantity-compare-price {
+    font-size: 1.125rem;
     text-decoration: line-through;
-    color: rgba(var(--color-foreground), 0.5);
+    color: rgba(var(--color-foreground), 0.4);
   }
 
   .add-to-cart-btn {
     width: 100%;
-    background: rgb(var(--color-foreground));
-    color: rgb(var(--color-background));
+    background: #8B4513;
+    color: #fff;
     border: none;
-    padding: 20px 40px;
+    padding: 22px 40px;
     font-size: 1.25rem;
     font-weight: 700;
     text-transform: uppercase;
     border-radius: 8px;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: all 0.2s ease;
     margin-bottom: 15px;
+    letter-spacing: 0.5px;
   }
 
   .add-to-cart-btn:hover {
-    transform: scale(1.02);
+    background: #6d3410;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
   }
 
   .add-to-cart-btn:active {
-    transform: scale(0.98);
+    transform: translateY(0);
   }
 
   .view-details-link {
@@ -376,7 +393,7 @@
     }
 
     .product-title {
-      font-size: 2rem;
+      font-size: 2.25rem;
     }
   }
 
@@ -387,27 +404,42 @@
     }
 
     .banner-text {
-      font-size: 0.9375rem;
+      font-size: 0.8125rem;
     }
 
     .banner-icon {
-      width: 50px;
+      width: 40px;
+    }
+
+    .guarantee-badge {
+      top: -15px;
+      right: -20px;
+    }
+
+    .guarantee-badge svg {
+      width: 65px;
+      height: 65px;
+    }
+
+    .badge-text {
+      font-size: 0.45rem;
+      max-width: 48px;
     }
 
     .product-title {
-      font-size: 1.75rem;
+      font-size: 1.875rem;
     }
 
-    .variant-label {
-      padding: 15px 20px;
+    .quantity-label {
+      padding: 15px 18px;
     }
 
-    .variant-title {
+    .quantity-title {
       font-size: 1rem;
     }
 
-    .variant-price {
-      font-size: 1.25rem;
+    .quantity-price {
+      font-size: 1.5rem;
     }
 
     .add-to-cart-btn {
@@ -419,17 +451,19 @@
 
 <script>
   function addToCart_{{ section_id }}() {
-    const selectedRadio = document.querySelector('input[name="variant-{{ section_id }}"]:checked');
+    const selectedRadio = document.querySelector('input[name="quantity-{{ section_id }}"]:checked');
     if (!selectedRadio) {
-      alert('{{ section.settings.select_variant_text }}');
+      alert('{{ section.settings.select_option_text }}');
       return;
     }
 
-    const variantId = selectedRadio.value;
+    const quantity = parseInt(selectedRadio.value);
+    const variantId = {{ selected_variant.id }};
+
     const formData = {
       items: [{
         id: variantId,
-        quantity: 1
+        quantity: quantity
       }]
     };
 
@@ -442,7 +476,6 @@
     })
     .then(response => response.json())
     .then(data => {
-      // Trigger cart drawer or redirect
       window.location.href = '/cart';
     })
     .catch((error) => {
@@ -457,6 +490,62 @@
   "name": "Featured Product Purchase",
   "tag": "section",
   "class": "featured-product-purchase",
+  "blocks": [
+    {
+      "type": "quantity_option",
+      "name": "Quantity Option",
+      "settings": [
+        {
+          "type": "text",
+          "id": "quantity_label",
+          "label": "Label",
+          "default": "1x Lymphatic Contour Brush",
+          "info": "e.g., '1x Lymphatic Contour Brush' or '2x Lymphatic Contour Brush'"
+        },
+        {
+          "type": "range",
+          "id": "quantity",
+          "label": "Quantity",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "price",
+          "label": "Price (in cents)",
+          "min": 0,
+          "max": 100000,
+          "step": 100,
+          "default": 2499,
+          "info": "Enter price in cents (e.g., 2499 = $24.99)"
+        },
+        {
+          "type": "range",
+          "id": "compare_price",
+          "label": "Compare at Price (in cents)",
+          "min": 0,
+          "max": 100000,
+          "step": 100,
+          "default": 4999,
+          "info": "Original price before discount"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_savings",
+          "label": "Show Savings",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_free_shipping",
+          "label": "Show Free Shipping Badge",
+          "default": false
+        }
+      ]
+    }
+  ],
   "settings": [
     {
       "type": "product",
@@ -530,7 +619,7 @@
     },
     {
       "type": "header",
-      "content": "Variant Settings"
+      "content": "Text Labels"
     },
     {
       "type": "text",
@@ -543,17 +632,6 @@
       "id": "free_shipping_text",
       "label": "Free Shipping Text",
       "default": "LIVRAISON GRATUITE INCLUSE"
-    },
-    {
-      "type": "text",
-      "id": "free_shipping_variants",
-      "label": "Free Shipping Variant Names",
-      "info": "Comma-separated variant names that get free shipping",
-      "default": "2x,3x"
-    },
-    {
-      "type": "header",
-      "content": "Button Settings"
     },
     {
       "type": "text",
@@ -575,8 +653,8 @@
     },
     {
       "type": "text",
-      "id": "select_variant_text",
-      "label": "Select Variant Alert Text",
+      "id": "select_option_text",
+      "label": "Select Option Alert Text",
       "default": "Veuillez sélectionner une option"
     },
     {
@@ -645,7 +723,42 @@
   "presets": [
     {
       "name": "Featured Product Purchase",
-      "category": "Product"
+      "category": "Product",
+      "blocks": [
+        {
+          "type": "quantity_option",
+          "settings": {
+            "quantity_label": "1x Brosse de Contour Lymphatique",
+            "quantity": 1,
+            "price": 2499,
+            "compare_price": 4999,
+            "show_savings": true,
+            "show_free_shipping": false
+          }
+        },
+        {
+          "type": "quantity_option",
+          "settings": {
+            "quantity_label": "2x Brosse de Contour Lymphatique",
+            "quantity": 2,
+            "price": 3999,
+            "compare_price": 9998,
+            "show_savings": true,
+            "show_free_shipping": true
+          }
+        },
+        {
+          "type": "quantity_option",
+          "settings": {
+            "quantity_label": "3x Brosse de Contour Lymphatique",
+            "quantity": 3,
+            "price": 5999,
+            "compare_price": 14997,
+            "show_savings": true,
+            "show_free_shipping": true
+          }
+        }
+      ]
     }
   ]
 }
