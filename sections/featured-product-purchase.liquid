@@ -1,7 +1,7 @@
 {% liquid
   assign product = section.settings.product
   assign selected_variant = product.selected_or_first_available_variant
-  assign section_id = section.id | replace: '-', '_'
+  assign section_id = section.id | replace: '-', '_' | replace: '__', '_'
 %}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
@@ -88,7 +88,8 @@
           <button
             type="button"
             class="add-to-cart-btn"
-            onclick="addToCart_{{ section_id }}()"
+            data-section-id="{{ section.id }}"
+            data-variant-id="{{ selected_variant.id }}"
           >
             {{ section.settings.add_to_cart_text }}
           </button>
@@ -379,39 +380,48 @@
 </style>
 
 <script>
-  function addToCart_{{ section_id }}() {
-    const selectedRadio = document.querySelector('input[name="quantity-{{ section_id }}"]:checked');
-    if (!selectedRadio) {
-      alert('{{ section.settings.select_option_text }}');
-      return;
+  (function() {
+    const section = document.querySelector('[data-section-id="{{ section.id }}"]').closest('.featured-product-purchase-section');
+    const addToCartBtn = section.querySelector('.add-to-cart-btn');
+
+    if (addToCartBtn) {
+      addToCartBtn.addEventListener('click', function() {
+        const sectionId = this.getAttribute('data-section-id');
+        const variantId = this.getAttribute('data-variant-id');
+        const selectedRadio = section.querySelector('input[name="quantity-{{ section_id }}"]:checked');
+
+        if (!selectedRadio) {
+          alert('{{ section.settings.select_option_text }}');
+          return;
+        }
+
+        const quantity = parseInt(selectedRadio.value);
+
+        const formData = {
+          items: [{
+            id: parseInt(variantId),
+            quantity: quantity
+          }]
+        };
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          window.location.href = '/cart';
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          alert('{{ section.settings.error_text }}');
+        });
+      });
     }
-
-    const quantity = parseInt(selectedRadio.value);
-    const variantId = {{ selected_variant.id }};
-
-    const formData = {
-      items: [{
-        id: variantId,
-        quantity: quantity
-      }]
-    };
-
-    fetch('/cart/add.js', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-      window.location.href = '/cart';
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      alert('{{ section.settings.error_text }}');
-    });
-  }
+  })();
 </script>
 
 {% schema %}
