@@ -15,7 +15,7 @@
         "text_PHtqQx": {
           "type": "text",
           "settings": {
-            "text": "<h1>New arrivals</h1>",
+            "text": "<p>Sculptez votre beauté naturelle</p>",
             "width": "fit-content",
             "max_width": "narrow",
             "alignment": "left",
@@ -37,37 +37,12 @@
           },
           "blocks": {}
         },
-        "text_dAeYQy": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Made with care and unconditionally loved by our customers.</p>",
-            "width": "fit-content",
-            "max_width": "narrow",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 32,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
         "button_X4zDtn": {
           "type": "button",
           "name": "t:names.button",
           "settings": {
             "label": "Shop now",
-            "link": "shopify://collections/all",
+            "link": "shopify://products/maykardi-lymphatic-contour-face-brush",
             "open_in_new_tab": false,
             "style_class": "button",
             "width": "fit-content",
@@ -80,12 +55,12 @@
       },
       "block_order": [
         "text_PHtqQx",
-        "text_dAeYQy",
         "button_X4zDtn"
       ],
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "image",
+        "image_1": "shopify://shop_images/ChatGPT_Image_Nov_23_2025_05_52_57_AM.png",
         "media_type_2": "image",
         "stack_media_on_mobile": false,
         "custom_mobile_media": false,
@@ -160,10 +135,6 @@
       "name": "Featured Product Purchase",
       "settings": {
         "product": "maykardi-lymphatic-contour-face-brush",
-        "show_banner": true,
-        "banner_text": "",
-        "show_guarantee_badge": true,
-        "guarantee_text": "GARANTIE SATISFAIT OU REMBOURSÉ",
         "show_rating": true,
         "rating_text": "Noté 4.8/5 (1,679 Avis)",
         "show_countdown": true,
