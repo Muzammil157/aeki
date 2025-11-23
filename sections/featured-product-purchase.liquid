@@ -1,0 +1,652 @@
+{% liquid
+  assign product = section.settings.product
+  assign selected_variant = product.selected_or_first_available_variant
+  assign section_id = section.id | replace: '-', '_'
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} featured-product-purchase-section"
+  style="{% render 'spacing-padding', settings: section.settings %}"
+>
+  {% if product != blank %}
+    <div class="featured-product-container">
+      <div class="featured-product-image-column">
+        {% if section.settings.show_banner and section.settings.banner_text != blank %}
+          <div class="product-banner">
+            <div class="banner-content">
+              {% if section.settings.banner_icon != blank %}
+                <img src="{{ section.settings.banner_icon | image_url: width: 80 }}" alt="Banner icon" class="banner-icon">
+              {% endif %}
+              <div class="banner-text">{{ section.settings.banner_text }}</div>
+            </div>
+            {% if section.settings.show_guarantee_badge %}
+              <div class="guarantee-badge">
+                <svg width="60" height="60" viewBox="0 0 100 100" fill="none">
+                  <circle cx="50" cy="50" r="45" fill="#FFD700" stroke="#000" stroke-width="2"/>
+                  <path d="M50 20L55 35L70 35L58 45L63 60L50 50L37 60L42 45L30 35L45 35L50 20Z" fill="#000"/>
+                </svg>
+                <span class="badge-text">{{ section.settings.guarantee_text }}</span>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <div class="product-image-wrapper">
+          {% if product.featured_media %}
+            <img
+              src="{{ product.featured_media | image_url: width: 800 }}"
+              alt="{{ product.featured_media.alt | default: product.title }}"
+              class="product-main-image"
+              loading="lazy"
+            >
+          {% else %}
+            {{ 'product-1' | placeholder_svg_tag: 'product-placeholder' }}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="featured-product-details-column">
+        <product-form-{{ section_id }} class="product-form-container">
+          {% if section.settings.show_rating %}
+            <div class="product-rating">
+              <div class="rating-stars">
+                {% for i in (1..5) %}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                {% endfor %}
+              </div>
+              <div class="rating-text">{{ section.settings.rating_text }}</div>
+            </div>
+          {% endif %}
+
+          <h1 class="product-title">{{ product.title }}</h1>
+
+          {% if section.settings.show_countdown and section.settings.countdown_text != blank %}
+            <div class="countdown-banner">
+              {{ section.settings.countdown_text }}
+            </div>
+          {% endif %}
+
+          <div class="product-variants-list">
+            {% for variant in product.variants %}
+              <div class="variant-option" data-variant-id="{{ variant.id }}">
+                <input
+                  type="radio"
+                  name="variant-{{ section_id }}"
+                  id="variant-{{ variant.id }}"
+                  value="{{ variant.id }}"
+                  {% if variant == selected_variant %}checked{% endif %}
+                  {% unless variant.available %}disabled{% endunless %}
+                  class="variant-radio"
+                >
+                <label for="variant-{{ variant.id }}" class="variant-label">
+                  <div class="variant-info">
+                    <div class="variant-title">{{ variant.title }}</div>
+                    {% if variant.compare_at_price > variant.price %}
+                      <div class="variant-savings">
+                        {{ section.settings.save_text }} {{ variant.compare_at_price | minus: variant.price | money }}
+                      </div>
+                    {% endif %}
+                    {% if section.settings.free_shipping_variants contains variant.title %}
+                      <div class="free-shipping-badge">{{ section.settings.free_shipping_text }}</div>
+                    {% endif %}
+                  </div>
+                  <div class="variant-pricing">
+                    <div class="variant-price">{{ variant.price | money }}</div>
+                    {% if variant.compare_at_price > variant.price %}
+                      <div class="variant-compare-price">{{ variant.compare_at_price | money }}</div>
+                    {% endif %}
+                  </div>
+                </label>
+              </div>
+            {% endfor %}
+          </div>
+
+          <button
+            type="button"
+            class="add-to-cart-btn"
+            data-product-id="{{ product.id }}"
+            onclick="addToCart_{{ section_id }}()"
+          >
+            {{ section.settings.add_to_cart_text }}
+          </button>
+
+          {% if section.settings.show_details_link %}
+            <a href="{{ product.url }}" class="view-details-link">
+              {{ section.settings.details_link_text }} →
+            </a>
+          {% endif %}
+        </product-form-{{ section_id }}>
+      </div>
+    </div>
+  {% else %}
+    <div class="product-placeholder-message">
+      <p>{{ section.settings.no_product_text }}</p>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .featured-product-purchase-section {
+    position: relative;
+  }
+
+  .featured-product-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .featured-product-image-column {
+    position: relative;
+  }
+
+  .product-banner {
+    position: relative;
+    background: rgb(var(--color-background));
+    border: 3px solid rgb(var(--color-foreground));
+    border-radius: 50px;
+    padding: 15px 30px;
+    margin-bottom: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 100%;
+  }
+
+  .banner-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .banner-icon {
+    width: 60px;
+    height: auto;
+    flex-shrink: 0;
+  }
+
+  .banner-text {
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+
+  .guarantee-badge {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .badge-text {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: -5px;
+  }
+
+  .product-image-wrapper {
+    width: 100%;
+  }
+
+  .product-main-image,
+  .product-placeholder {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .product-rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  .rating-stars {
+    display: flex;
+    gap: 2px;
+    color: #FFD700;
+  }
+
+  .rating-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .product-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 20px 0;
+  }
+
+  .countdown-banner {
+    background: rgb(var(--color-background));
+    border-top: 2px solid rgba(var(--color-foreground), 0.2);
+    border-bottom: 2px solid rgba(var(--color-foreground), 0.2);
+    padding: 15px 0;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+  }
+
+  .product-variants-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .variant-option {
+    position: relative;
+  }
+
+  .variant-radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .variant-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border: 2px solid rgba(var(--color-foreground), 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .variant-radio:checked + .variant-label {
+    border-color: rgb(var(--color-foreground));
+    border-width: 3px;
+    background: rgba(var(--color-foreground), 0.03);
+  }
+
+  .variant-radio:disabled + .variant-label {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .variant-label:hover:not(.variant-radio:disabled + .variant-label) {
+    border-color: rgba(var(--color-foreground), 0.5);
+  }
+
+  .variant-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .variant-title {
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .variant-savings {
+    font-size: 0.875rem;
+    color: #16a34a;
+    font-weight: 600;
+  }
+
+  .free-shipping-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-style: italic;
+    color: rgba(var(--color-foreground), 0.7);
+  }
+
+  .variant-pricing {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+  }
+
+  .variant-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .variant-compare-price {
+    font-size: 1rem;
+    text-decoration: line-through;
+    color: rgba(var(--color-foreground), 0.5);
+  }
+
+  .add-to-cart-btn {
+    width: 100%;
+    background: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+    border: none;
+    padding: 20px 40px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    margin-bottom: 15px;
+  }
+
+  .add-to-cart-btn:hover {
+    transform: scale(1.02);
+  }
+
+  .add-to-cart-btn:active {
+    transform: scale(0.98);
+  }
+
+  .view-details-link {
+    display: block;
+    text-align: center;
+    font-weight: 600;
+    text-decoration: none;
+    color: rgb(var(--color-foreground));
+    transition: opacity 0.2s ease;
+  }
+
+  .view-details-link:hover {
+    opacity: 0.7;
+  }
+
+  .product-placeholder-message {
+    text-align: center;
+    padding: 100px 20px;
+    font-size: 1.125rem;
+    color: rgba(var(--color-foreground), 0.6);
+  }
+
+  @media screen and (max-width: 989px) {
+    .featured-product-container {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .product-title {
+      font-size: 2rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .product-banner {
+      padding: 12px 20px;
+      margin-bottom: 20px;
+    }
+
+    .banner-text {
+      font-size: 0.9375rem;
+    }
+
+    .banner-icon {
+      width: 50px;
+    }
+
+    .product-title {
+      font-size: 1.75rem;
+    }
+
+    .variant-label {
+      padding: 15px 20px;
+    }
+
+    .variant-title {
+      font-size: 1rem;
+    }
+
+    .variant-price {
+      font-size: 1.25rem;
+    }
+
+    .add-to-cart-btn {
+      font-size: 1.125rem;
+      padding: 18px 30px;
+    }
+  }
+</style>
+
+<script>
+  function addToCart_{{ section_id }}() {
+    const selectedRadio = document.querySelector('input[name="variant-{{ section_id }}"]:checked');
+    if (!selectedRadio) {
+      alert('{{ section.settings.select_variant_text }}');
+      return;
+    }
+
+    const variantId = selectedRadio.value;
+    const formData = {
+      items: [{
+        id: variantId,
+        quantity: 1
+      }]
+    };
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Trigger cart drawer or redirect
+      window.location.href = '/cart';
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert('{{ section.settings.error_text }}');
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Featured Product Purchase",
+  "tag": "section",
+  "class": "featured-product-purchase",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "header",
+      "content": "Banner Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_banner",
+      "label": "Show Banner",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_icon",
+      "label": "Banner Icon"
+    },
+    {
+      "type": "text",
+      "id": "banner_text",
+      "label": "Banner Text",
+      "default": "+ GUIDE E-BOOK EXCLUSIF GRATUIT AVEC CHAQUE COMMANDE AUJOURD'HUI"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_guarantee_badge",
+      "label": "Show Guarantee Badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "guarantee_text",
+      "label": "Guarantee Badge Text",
+      "default": "GARANTIE SATISFAIT OU REMBOURSÉ"
+    },
+    {
+      "type": "header",
+      "content": "Rating Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show Rating",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "rating_text",
+      "label": "Rating Text",
+      "default": "Noté 4.8/5 (1,679 Avis)"
+    },
+    {
+      "type": "header",
+      "content": "Countdown Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_countdown",
+      "label": "Show Countdown Banner",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "countdown_text",
+      "label": "Countdown Text",
+      "default": "VENTE ANTICIPÉE BLACK FRIDAY SE TERMINE LE 23 NOV"
+    },
+    {
+      "type": "header",
+      "content": "Variant Settings"
+    },
+    {
+      "type": "text",
+      "id": "save_text",
+      "label": "Save Text",
+      "default": "ÉCONOMISEZ"
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_text",
+      "label": "Free Shipping Text",
+      "default": "LIVRAISON GRATUITE INCLUSE"
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_variants",
+      "label": "Free Shipping Variant Names",
+      "info": "Comma-separated variant names that get free shipping",
+      "default": "2x,3x"
+    },
+    {
+      "type": "header",
+      "content": "Button Settings"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_text",
+      "label": "Add to Cart Button Text",
+      "default": "AJOUTER AU PANIER"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_details_link",
+      "label": "Show Details Link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "details_link_text",
+      "label": "Details Link Text",
+      "default": "Voir tous les détails"
+    },
+    {
+      "type": "text",
+      "id": "select_variant_text",
+      "label": "Select Variant Alert Text",
+      "default": "Veuillez sélectionner une option"
+    },
+    {
+      "type": "text",
+      "id": "error_text",
+      "label": "Error Message Text",
+      "default": "Une erreur s'est produite. Veuillez réessayer."
+    },
+    {
+      "type": "text",
+      "id": "no_product_text",
+      "label": "No Product Selected Text",
+      "default": "Veuillez sélectionner un produit dans les paramètres de la section"
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "primary"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Product Purchase",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
