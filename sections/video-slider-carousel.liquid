@@ -1,4 +1,3 @@
-
 {% liquid
   assign heading = section.settings.heading
   assign slides_per_view = section.settings.slides_per_view
@@ -7,37 +6,28 @@
   if section.settings.icons_style == 'none' or section.blocks.size <= 1
     assign show_arrows = false
   endif
-  assign section_id = section.id
+  assign unique_id = section.id | replace: '-', '_'
 %}
 
-<!-- Swiper CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
-  class="spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} video-slider-carousel-section"
+  class="spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} video-slider-carousel-section-{{ unique_id }}"
   style="{% render 'spacing-padding', settings: section.settings %}"
-  data-section-id="{{ section_id }}"
 >
   {% if heading != blank %}
-    <div class="video-slider-carousel__heading" style="text-align: {{ section.settings.heading_alignment }};">
-      <h2 class="video-slider-carousel__title">{{ heading }}</h2>
+    <div class="video-carousel-heading" style="text-align: {{ section.settings.heading_alignment }};">
+      <h2 class="video-carousel-title">{{ heading }}</h2>
     </div>
   {% endif %}
 
-  <div class="video-slider-carousel__container">
-    <!-- Swiper -->
-    <div class="swiper video-carousel-swiper-{{ section_id }}"
-         data-slides-per-view="{{ slides_per_view }}"
-         data-slides-per-view-mobile="{{ slides_per_view_mobile }}"
-         data-autoplay="{{ section.settings.autoplay }}"
-         data-autoplay-speed="{{ section.settings.autoplay_speed }}"
-         data-gap="{{ section.settings.gap }}"
-         data-center-scale="{{ section.settings.center_slide_scale }}">
+  <div class="video-carousel-container-{{ unique_id }}">
+    <div class="swiper swiper-{{ unique_id }}">
       <div class="swiper-wrapper">
         {% for block in section.blocks %}
           <div class="swiper-slide" {{ block.shopify_attributes }}>
-            <div class="video-slider-carousel__video-wrapper">
+            <div class="video-carousel-video-wrapper">
               {% if block.settings.source == 'uploaded' %}
                 {% if block.settings.video != blank %}
                   {{
@@ -47,27 +37,29 @@
                       loop: block.settings.video_loop,
                       controls: block.settings.video_controls,
                       muted: true,
-                      class: 'video-slider-carousel__video'
+                      class: 'video-carousel-video'
                   }}
                 {% else %}
-                  {{ 'hero-apparel-1' | placeholder_svg_tag: 'video-slider-carousel__placeholder' }}
+                  {{ 'hero-apparel-1' | placeholder_svg_tag: 'video-carousel-placeholder' }}
                 {% endif %}
               {% elsif block.settings.video_url != blank %}
-                {% render 'video',
-                  video_from_url: true,
-                  video: block.settings.video_url.id,
-                  video_class: 'video-slider-carousel__video',
-                  video_type: block.settings.video_url.type,
-                  video_alt: block.settings.alt,
-                  video_preview_image: block.settings.cover_image,
-                  section_id: section.id
-                %}
+                <div class="video-carousel-embed">
+                  {% render 'video',
+                    video_from_url: true,
+                    video: block.settings.video_url.id,
+                    video_class: 'video-carousel-video',
+                    video_type: block.settings.video_url.type,
+                    video_alt: block.settings.alt,
+                    video_preview_image: block.settings.cover_image,
+                    section_id: section.id
+                  %}
+                </div>
               {% else %}
-                {{ 'hero-apparel-1' | placeholder_svg_tag: 'video-slider-carousel__placeholder' }}
+                {{ 'hero-apparel-1' | placeholder_svg_tag: 'video-carousel-placeholder' }}
               {% endif %}
             </div>
             {% if block.settings.caption != blank %}
-              <div class="video-slider-carousel__caption">
+              <div class="video-carousel-caption">
                 {{ block.settings.caption }}
               </div>
             {% endif %}
@@ -75,59 +67,62 @@
         {% endfor %}
       </div>
 
-      <!-- Navigation arrows -->
       {% if show_arrows %}
-        <div class="swiper-button-prev swiper-button-prev-{{ section_id }}"></div>
-        <div class="swiper-button-next swiper-button-next-{{ section_id }}"></div>
+        <div class="swiper-button-prev carousel-btn-prev-{{ unique_id }}"></div>
+        <div class="swiper-button-next carousel-btn-next-{{ unique_id }}"></div>
       {% endif %}
 
-      <!-- Pagination -->
       {% if section.settings.show_pagination %}
-        <div class="swiper-pagination swiper-pagination-{{ section_id }}"></div>
+        <div class="swiper-pagination carousel-pagination-{{ unique_id }}"></div>
       {% endif %}
     </div>
   </div>
 </div>
 
-{% stylesheet %}
-  .video-slider-carousel-section {
+<style>
+  .video-slider-carousel-section-{{ unique_id }} {
     position: relative;
   }
 
-  .video-slider-carousel__heading {
+  .video-carousel-heading {
     margin-bottom: 40px;
   }
 
-  .video-slider-carousel__title {
+  .video-carousel-title {
     font-size: 2.5rem;
     font-weight: 600;
     margin: 0;
+    line-height: 1.2;
   }
 
-  .video-slider-carousel__container {
+  .video-carousel-container-{{ unique_id }} {
     position: relative;
     overflow: visible;
+    padding: 0 60px;
   }
 
-  .video-carousel-swiper-{{ section_id }} {
-    overflow: visible;
-    padding: 20px 0 50px;
+  .swiper-{{ unique_id }} {
+    overflow: visible !important;
+    padding: 30px 0 60px !important;
   }
 
-  .video-carousel-swiper-{{ section_id }} .swiper-wrapper {
+  .swiper-{{ unique_id }} .swiper-wrapper {
     align-items: center;
   }
 
-  .video-carousel-swiper-{{ section_id }} .swiper-slide {
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 0.6;
+  .swiper-{{ unique_id }} .swiper-slide {
+    transition: all 0.3s ease;
+    opacity: 0.5;
+    transform: scale(0.85);
   }
 
-  .video-carousel-swiper-{{ section_id }} .swiper-slide-active {
-    opacity: 1;
+  .swiper-{{ unique_id }} .swiper-slide-active {
+    opacity: 1 !important;
+    transform: scale({{ section.settings.center_slide_scale }}) !important;
+    z-index: 10;
   }
 
-  .video-slider-carousel__video-wrapper {
+  .video-carousel-video-wrapper {
     position: relative;
     width: 100%;
     aspect-ratio: {{ section.settings.video_aspect_ratio }};
@@ -136,157 +131,148 @@
     background-color: #f5f5f5;
   }
 
-  .video-slider-carousel__video,
-  .video-slider-carousel__placeholder {
+  .video-carousel-video,
+  .video-carousel-placeholder,
+  .video-carousel-embed {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .video-slider-carousel__caption {
+  .video-carousel-caption {
     margin-top: 12px;
     text-align: center;
     font-size: 0.875rem;
   }
 
-  /* Swiper Navigation Buttons */
-  .swiper-button-prev-{{ section_id }},
-  .swiper-button-next-{{ section_id }} {
-    color: rgba(var(--color-foreground), 0.75);
-    width: 44px;
-    height: 44px;
-    background: rgba(var(--color-background), 0.9);
-    border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  .carousel-btn-prev-{{ unique_id }},
+  .carousel-btn-next-{{ unique_id }} {
+    color: #333 !important;
+    width: 50px !important;
+    height: 50px !important;
+    background: #fff !important;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
   }
 
-  .swiper-button-prev-{{ section_id }}:hover,
-  .swiper-button-next-{{ section_id }}:hover {
-    background: rgb(var(--color-background));
-    color: rgb(var(--color-foreground));
+  .carousel-btn-prev-{{ unique_id }}:hover,
+  .carousel-btn-next-{{ unique_id }}:hover {
+    background: #f5f5f5 !important;
   }
 
-  .swiper-button-prev-{{ section_id }}::after,
-  .swiper-button-next-{{ section_id }}::after {
-    font-size: 20px;
-    font-weight: bold;
+  .carousel-btn-prev-{{ unique_id }}::after,
+  .carousel-btn-next-{{ unique_id }}::after {
+    font-size: 22px !important;
+    font-weight: bold !important;
   }
 
-  /* Swiper Pagination */
-  .swiper-pagination-{{ section_id }} {
-    bottom: 0 !important;
+  .carousel-pagination-{{ unique_id }} {
+    bottom: 10px !important;
   }
 
-  .swiper-pagination-{{ section_id }} .swiper-pagination-bullet {
-    background: rgb(var(--color-foreground));
-    opacity: 0.3;
+  .carousel-pagination-{{ unique_id }} .swiper-pagination-bullet {
+    background: #333 !important;
+    opacity: 0.3 !important;
+    width: 10px !important;
+    height: 10px !important;
   }
 
-  .swiper-pagination-{{ section_id }} .swiper-pagination-bullet-active {
-    opacity: 1;
+  .carousel-pagination-{{ unique_id }} .swiper-pagination-bullet-active {
+    opacity: 1 !important;
+    background: #333 !important;
   }
 
   @media screen and (max-width: 749px) {
-    .video-slider-carousel__title {
+    .video-carousel-title {
       font-size: 1.75rem;
     }
 
-    .video-slider-carousel__heading {
+    .video-carousel-heading {
       margin-bottom: 24px;
     }
 
-    .swiper-button-prev-{{ section_id }},
-    .swiper-button-next-{{ section_id }} {
-      width: 36px;
-      height: 36px;
+    .video-carousel-container-{{ unique_id }} {
+      padding: 0 40px;
     }
 
-    .swiper-button-prev-{{ section_id }}::after,
-    .swiper-button-next-{{ section_id }}::after {
-      font-size: 16px;
+    .carousel-btn-prev-{{ unique_id }},
+    .carousel-btn-next-{{ unique_id }} {
+      width: 40px !important;
+      height: 40px !important;
+    }
+
+    .carousel-btn-prev-{{ unique_id }}::after,
+    .carousel-btn-next-{{ unique_id }}::after {
+      font-size: 18px !important;
+    }
+
+    .swiper-{{ unique_id }} .swiper-slide {
+      transform: scale(0.9);
+    }
+
+    .swiper-{{ unique_id }} .swiper-slide-active {
+      transform: scale(1.1) !important;
     }
   }
-{% endstylesheet %}
+</style>
 
-<!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-{% javascript %}
-  document.addEventListener('DOMContentLoaded', function() {
-    const sectionId = '{{ section_id }}';
-    const swiperEl = document.querySelector('.video-carousel-swiper-' + sectionId);
+<script>
+(function() {
+  function initSwiper_{{ unique_id }}() {
+    if (typeof Swiper === 'undefined') {
+      setTimeout(initSwiper_{{ unique_id }}, 100);
+      return;
+    }
 
-    if (!swiperEl) return;
+    const swiperEl = document.querySelector('.swiper-{{ unique_id }}');
+    if (!swiperEl) {
+      setTimeout(initSwiper_{{ unique_id }}, 100);
+      return;
+    }
 
-    const slidesPerView = parseInt(swiperEl.dataset.slidesPerView) || 3;
-    const slidesPerViewMobile = parseInt(swiperEl.dataset.slidesPerViewMobile) || 1;
-    const autoplay = swiperEl.dataset.autoplay === 'true';
-    const autoplaySpeed = (parseInt(swiperEl.dataset.autoplaySpeed) || 5) * 1000;
-    const gap = parseInt(swiperEl.dataset.gap) || 20;
-    const centerScale = parseFloat(swiperEl.dataset.centerScale) || 1.2;
-
-    const swiper = new Swiper('.video-carousel-swiper-' + sectionId, {
-      slidesPerView: slidesPerViewMobile,
-      spaceBetween: gap,
+    const swiper = new Swiper('.swiper-{{ unique_id }}', {
+      slidesPerView: {{ slides_per_view_mobile }},
+      spaceBetween: {{ section.settings.gap }},
       centeredSlides: true,
       loop: true,
       grabCursor: true,
 
-      // Autoplay
-      autoplay: autoplay ? {
-        delay: autoplaySpeed,
+      {% if section.settings.autoplay %}
+      autoplay: {
+        delay: {{ section.settings.autoplay_speed | times: 1000 }},
         disableOnInteraction: false,
         pauseOnMouseEnter: true,
-      } : false,
+      },
+      {% endif %}
 
-      // Navigation arrows
       navigation: {
-        nextEl: '.swiper-button-next-' + sectionId,
-        prevEl: '.swiper-button-prev-' + sectionId,
+        nextEl: '.carousel-btn-next-{{ unique_id }}',
+        prevEl: '.carousel-btn-prev-{{ unique_id }}',
       },
 
-      // Pagination
       pagination: {
-        el: '.swiper-pagination-' + sectionId,
+        el: '.carousel-pagination-{{ unique_id }}',
         clickable: true,
       },
 
-      // Responsive breakpoints
       breakpoints: {
         750: {
-          slidesPerView: slidesPerView,
-          spaceBetween: gap,
-        }
-      },
-
-      // Center slide effect
-      on: {
-        init: function() {
-          updateSlideScale(this);
-        },
-        slideChange: function() {
-          updateSlideScale(this);
-        },
-        transitionEnd: function() {
-          updateSlideScale(this);
+          slidesPerView: {{ slides_per_view }},
+          spaceBetween: {{ section.settings.gap }},
         }
       }
     });
+  }
 
-    function updateSlideScale(swiper) {
-      const slides = swiper.slides;
-      slides.forEach((slide, index) => {
-        if (slide.classList.contains('swiper-slide-active')) {
-          slide.style.transform = 'scale(' + centerScale + ')';
-          slide.style.zIndex = '10';
-        } else {
-          slide.style.transform = 'scale(1)';
-          slide.style.zIndex = '1';
-        }
-      });
-    }
-  });
-{% endjavascript %}
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSwiper_{{ unique_id }});
+  } else {
+    initSwiper_{{ unique_id }}();
+  }
+})();
+</script>
 
 {% schema %}
 {
@@ -420,7 +406,7 @@
       "max": 1.5,
       "step": 0.1,
       "default": 1.2,
-      "info": "How much bigger the center slide should be (1.0 = no scaling)"
+      "info": "How much bigger the center slide should be"
     },
     {
       "type": "range",
@@ -508,8 +494,7 @@
       "max": 10,
       "step": 1,
       "unit": "s",
-      "default": 5,
-      "visible_if": "{{ section.settings.autoplay }}"
+      "default": 5
     },
     {
       "type": "header",
