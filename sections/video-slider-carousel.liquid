@@ -232,12 +232,16 @@
       return;
     }
 
+    const totalSlides = swiperEl.querySelectorAll('.swiper-slide').length;
+    const initialSlide = Math.floor(totalSlides / 2);
+
     const swiper = new Swiper('.swiper-{{ unique_id }}', {
       slidesPerView: {{ slides_per_view_mobile }},
       spaceBetween: {{ section.settings.gap }},
       centeredSlides: true,
-      loop: true,
+      loop: false,
       grabCursor: true,
+      initialSlide: initialSlide,
 
       {% if section.settings.autoplay %}
       autoplay: {
