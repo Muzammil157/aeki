@@ -115,6 +115,34 @@
         "padding-block-end": 40
       }
     },
+    "featured_product_purchase_XWHUiL": {
+      "type": "featured-product-purchase",
+      "name": "Featured Product Purchase",
+      "settings": {
+        "product": "maykardi-lymphatic-contour-face-brush",
+        "show_banner": true,
+        "banner_text": "+ GUIDE E-BOOK EXCLUSIF GRATUIT AVEC CHAQUE COMMANDE AUJOURD'HUI",
+        "show_guarantee_badge": true,
+        "guarantee_text": "GARANTIE SATISFAIT OU REMBOURSÉ",
+        "show_rating": true,
+        "rating_text": "Noté 4.8/5 (1,679 Avis)",
+        "show_countdown": true,
+        "countdown_text": "VENTE ANTICIPÉE BLACK FRIDAY SE TERMINE LE 23 NOV",
+        "save_text": "ÉCONOMISEZ",
+        "free_shipping_text": "LIVRAISON GRATUITE INCLUSE",
+        "free_shipping_variants": "2x,3x",
+        "add_to_cart_text": "AJOUTER AU PANIER",
+        "show_details_link": true,
+        "details_link_text": "Voir tous les détails",
+        "select_variant_text": "Veuillez sélectionner une option",
+        "error_text": "Une erreur s'est produite. Veuillez réessayer.",
+        "no_product_text": "Veuillez sélectionner un produit dans les paramètres de la section",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 50,
+        "padding-block-end": 50
+      }
+    },
     "media_with_content_E7M3aJ": {
       "type": "media-with-content",
       "blocks": {
@@ -213,6 +241,7 @@
   },
   "order": [
     "hero_8dJdkp",
+    "featured_product_purchase_XWHUiL",
     "media_with_content_E7M3aJ"
   ]
 }
