@@ -1313,6 +1313,45 @@
         "padding-block-end": 40
       }
     },
+    "customer_statistics_WhwPNJ": {
+      "type": "customer-statistics",
+      "blocks": {
+        "statistic_6yyrw9": {
+          "type": "statistic",
+          "settings": {
+            "percentage": 89,
+            "description": "Ont remarqué une réduction des poches et des gonflements après la première semaine d'utilisation."
+          }
+        },
+        "statistic_efATJ8": {
+          "type": "statistic",
+          "settings": {
+            "percentage": 94,
+            "description": "Ont signalé une mâchoire plus définie et un aspect sculpté grâce à un brossage régulier."
+          }
+        },
+        "statistic_4UqYFe": {
+          "type": "statistic",
+          "settings": {
+            "percentage": 91,
+            "description": "Ont déclaré que leur peau semblait plus saine, plus lisse et plus radieuse avec une utilisation quotidienne."
+          }
+        }
+      },
+      "block_order": [
+        "statistic_6yyrw9",
+        "statistic_efATJ8",
+        "statistic_4UqYFe"
+      ],
+      "name": "Statistiques Clients",
+      "settings": {
+        "disclaimer": "*Basé sur une enquête auprès de 527 clients après 30 jours d'utilisation",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 50,
+        "padding-block-end": 50
+      }
+    },
     "product_recommendations_dDfQTx": {
       "type": "product-recommendations",
       "blocks": {
@@ -1520,6 +1559,7 @@
     "marquee_r8WyKj",
     "section_UhNgJN",
     "section_pijjhJ",
+    "customer_statistics_WhwPNJ",
     "product_recommendations_dDfQTx"
   ]
 }
