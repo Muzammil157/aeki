@@ -1257,7 +1257,7 @@
           "type": "text",
           "name": "Text",
           "settings": {
-            "text": "<p>La meilleure routine de soin est celle que vous pouvez suivre régulièrement.</p>",
+            "text": "<p>La routine de soin facile à suivre.</p>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
