@@ -1265,25 +1265,25 @@
         "padding-block-end": 40
       }
     },
-    "customer_statistics_WhwPNJ": {
-      "type": "customer-statistics",
+    "percentage_stats_XFDtXx": {
+      "type": "percentage-stats",
       "blocks": {
-        "statistic_6yyrw9": {
-          "type": "statistic",
+        "stat_Uq8TCz": {
+          "type": "stat",
           "settings": {
             "percentage": 89,
             "description": "Ont remarqué une réduction des poches et des gonflements après la première semaine d'utilisation."
           }
         },
-        "statistic_efATJ8": {
-          "type": "statistic",
+        "stat_MCP6QF": {
+          "type": "stat",
           "settings": {
             "percentage": 94,
             "description": "Ont signalé une mâchoire plus définie et un aspect sculpté grâce à un brossage régulier."
           }
         },
-        "statistic_4UqYFe": {
-          "type": "statistic",
+        "stat_Tan4V4": {
+          "type": "stat",
           "settings": {
             "percentage": 91,
             "description": "Ont déclaré que leur peau semblait plus saine, plus lisse et plus radieuse avec une utilisation quotidienne."
@@ -1291,17 +1291,24 @@
         }
       },
       "block_order": [
-        "statistic_6yyrw9",
-        "statistic_efATJ8",
-        "statistic_4UqYFe"
+        "stat_Uq8TCz",
+        "stat_MCP6QF",
+        "stat_Tan4V4"
       ],
-      "name": "Statistiques Clients",
+      "name": "Percentage Stats",
       "settings": {
-        "disclaimer": "*Basé sur une enquête auprès de 527 clients après 30 jours d'utilisation",
-        "color_scheme": "scheme-4",
-        "section_width": "page-width",
-        "padding-block-start": 50,
-        "padding-block-end": 50
+        "title": "CE QUI NOUS DISTINGUE",
+        "footnote": "*Basé sur une enquête menée auprès de plus de 500 utilisateurs actuels évaluant leur perception de l’efficacité du produit.",
+        "background_color": "#f5f5dc",
+        "max_width": 1200,
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "stat_padding": 50,
+        "percentage_size": 72,
+        "percentage_weight": "400",
+        "description_size": 16,
+        "title_size": 12,
+        "footnote_size": 12
       }
     },
     "product_comparison_y7tNjk": {
@@ -1530,7 +1537,7 @@
     "section_Nzh73z",
     "marquee_r8WyKj",
     "section_pijjhJ",
-    "customer_statistics_WhwPNJ",
+    "percentage_stats_XFDtXx",
     "product_comparison_y7tNjk",
     "customer_reviews_MPUDVg",
     "1763904735e682208c",
