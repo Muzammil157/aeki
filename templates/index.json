@@ -147,7 +147,7 @@
         "select_option_text": "Veuillez sélectionner une option",
         "error_text": "Une erreur s'est produite. Veuillez réessayer.",
         "no_product_text": "Veuillez sélectionner un produit dans les paramètres de la section",
-        "color_scheme": "",
+        "color_scheme": "scheme-4",
         "section_width": "page-width",
         "padding-block-start": 50,
         "padding-block-end": 50
