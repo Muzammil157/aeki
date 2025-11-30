@@ -82,6 +82,42 @@
       {%- endform -%}
     </div>
   {%- endif -%}
+
+  {% if block_settings.show_trust_icons %}
+    <div class="trust-icons">
+      {% if block_settings.show_secure_checkout %}
+        <div class="trust-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          <span>{{ block_settings.secure_checkout_text }}</span>
+        </div>
+      {% endif %}
+
+      {% if block_settings.show_fast_delivery %}
+        <div class="trust-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="3" width="15" height="13"/>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          <span>{{ block_settings.fast_delivery_text }}</span>
+        </div>
+      {% endif %}
+
+      {% if block_settings.show_easy_returns %}
+        <div class="trust-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+          </svg>
+          <span>{{ block_settings.easy_returns_text }}</span>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
 </product-price>
 
 {% # theme-check-disable %}
@@ -99,6 +135,47 @@
 
   .installments:not(:has(shopify-payment-terms)) {
     display: none;
+  }
+
+  .trust-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(var(--color-foreground-rgb) / 0.1);
+  }
+
+  .trust-icon {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    color: rgb(var(--color-foreground-rgb) / 0.7);
+  }
+
+  .trust-icon svg {
+    flex-shrink: 0;
+    color: rgb(var(--color-foreground-rgb) / 0.6);
+  }
+
+  .trust-icon span {
+    line-height: 1.2;
+  }
+
+  @media screen and (max-width: 749px) {
+    .trust-icons {
+      gap: 12px;
+    }
+
+    .trust-icon {
+      font-size: 0.75rem;
+    }
+
+    .trust-icon svg {
+      width: 14px;
+      height: 14px;
+    }
   }
 {% endstylesheet %}
 
@@ -132,6 +209,52 @@
       "id": "show_tax_info",
       "label": "t:settings.show_tax_info",
       "default": false
+    },
+    {
+      "type": "header",
+      "content": "Trust Icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_icons",
+      "label": "Show Trust Icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secure_checkout",
+      "label": "Show Secure Checkout",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "secure_checkout_text",
+      "label": "Secure Checkout Text",
+      "default": "Paiement sécurisé"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_fast_delivery",
+      "label": "Show Fast Delivery",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "fast_delivery_text",
+      "label": "Fast Delivery Text",
+      "default": "Livraison rapide"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_easy_returns",
+      "label": "Show Easy Returns",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "easy_returns_text",
+      "label": "Easy Returns Text",
+      "default": "Retours faciles"
     },
     {
       "type": "header",
