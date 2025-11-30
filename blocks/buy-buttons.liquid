@@ -80,6 +80,21 @@
             endif
           -%}
 
+          {%- if block_settings.show_ebook_option and product.id == 56877546209667 -%}
+            <div class="ebook-checkbox-wrapper">
+              <input
+                type="checkbox"
+                id="add-ebook-{{ section.id }}"
+                name="add-ebook"
+                class="ebook-checkbox"
+                {% if block_settings.ebook_checked_by_default %}checked{% endif %}
+              >
+              <label for="add-ebook-{{ section.id }}" class="ebook-label">
+                <span class="ebook-label-text">{{ block_settings.ebook_label }}</span>
+              </label>
+            </div>
+          {%- endif -%}
+
           {%- if has_quantity_rules -%}
             {%- assign cart_quantity = cart | item_count_for_variant: variant.id -%}
             <div class="quantity-label">
@@ -145,6 +160,55 @@
         </div>
       {%- endform -%}
     </product-form-component>
+
+    {%- if block_settings.show_ebook_option and product.id == 56877546209667 -%}
+      <script>
+        (function() {
+          const form = document.getElementById('{{ product_form_id }}');
+          const ebookCheckbox = document.getElementById('add-ebook-{{ section.id }}');
+
+          if (form && ebookCheckbox) {
+            form.addEventListener('submit', function(e) {
+              if (ebookCheckbox.checked) {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+                const variantId = formData.get('id');
+                const quantity = formData.get('quantity') || 1;
+
+                // Get ebook variant ID
+                fetch('/products/e-book-tutorial.js')
+                  .then(response => response.json())
+                  .then(ebookProduct => {
+                    const ebookVariantId = ebookProduct.variants[0].id;
+
+                    // Add both products to cart
+                    fetch('/cart/add.js', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        items: [
+                          { id: parseInt(variantId), quantity: parseInt(quantity) },
+                          { id: ebookVariantId, quantity: parseInt(quantity) }
+                        ]
+                      })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                      // Trigger cart update
+                      window.location.href = '/cart';
+                    })
+                    .catch(error => {
+                      console.error('Error:', error);
+                      alert('Une erreur est survenue');
+                    });
+                  });
+              }
+            });
+          }
+        })();
+      </script>
+    {%- endif -%}
   {%- else -%}
     <div class="product-form-buttons">
       <button
@@ -273,6 +337,35 @@
 {% stylesheet %}
   .buy-buttons-block {
     width: 100%;
+  }
+
+  .ebook-checkbox-wrapper {
+    flex: 1 0 100%;
+    width: 100%;
+    margin-block-end: var(--gap-md);
+    padding: var(--padding-md);
+    background: rgba(var(--color-foreground-rgb) / 0.03);
+    border: 1px solid rgba(var(--color-foreground-rgb) / 0.1);
+    border-radius: var(--border-radius);
+  }
+
+  .ebook-checkbox {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .ebook-label {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    cursor: pointer;
+    font-size: var(--font-size--sm);
+  }
+
+  .ebook-label-text {
+    flex: 1;
   }
 
   .product-form-buttons {
@@ -520,6 +613,29 @@
     {
       "type": "paragraph",
       "content": "t:content.gift_card_form_description"
+    },
+    {
+      "type": "header",
+      "content": "E-book Option"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_ebook_option",
+      "label": "Show E-book Checkbox",
+      "default": true,
+      "info": "Only shows on product ID 56877546209667"
+    },
+    {
+      "type": "text",
+      "id": "ebook_label",
+      "label": "E-book Label",
+      "default": "+ Guide e-book exclusif GRATUIT avec chaque commande"
+    },
+    {
+      "type": "checkbox",
+      "id": "ebook_checked_by_default",
+      "label": "Checked by Default",
+      "default": true
     },
     {
       "type": "header",
