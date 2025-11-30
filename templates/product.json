@@ -498,6 +498,84 @@
         "padding-block-end": 0
       }
     },
+    "feature_14_T3Ghak": {
+      "type": "feature-14",
+      "blocks": {
+        "feature_9WgbTA": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "",
+            "title": "Peau éclatante & éclaire",
+            "description": "Élimine les toxines et favorise un teint lumineux et uniforme."
+          }
+        },
+        "feature_QxwNNk": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "",
+            "title": "Décongestion des yeux & cernes",
+            "description": "Réduit poches et cernes pour un regard revitalisé."
+          }
+        },
+        "feature_K6D4EY": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "",
+            "title": "Soulagement des tensions & stress",
+            "description": "Apaise le système nerveux et libère les tensions accumulées."
+          }
+        },
+        "feature_T9HEEU": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "",
+            "title": "Réduction des gonflements & rétention d’eau",
+            "description": "Stimule le flux lymphatique pour drainer l’excès de fluides."
+          }
+        },
+        "feature_ygtpRN": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "",
+            "title": "Stimulation de la circulation & détox interne",
+            "description": "Améliore la circulation et élimine les déchets cellulaires."
+          }
+        },
+        "feature_V9bWWC": {
+          "type": "feature",
+          "settings": {
+            "icon_svg": "",
+            "title": "Peau plus ferme & contours redessinés",
+            "description": "Lisse et tonifie la peau pour des contours naturels améliorés."
+          }
+        }
+      },
+      "block_order": [
+        "feature_9WgbTA",
+        "feature_QxwNNk",
+        "feature_K6D4EY",
+        "feature_T9HEEU",
+        "feature_ygtpRN",
+        "feature_V9bWWC"
+      ],
+      "name": "Feature 14",
+      "settings": {
+        "subheading": "Prendre soin de votre corps de l’intérieur",
+        "heading": "Rituel de Drainage Lymphatique: Guide Complet",
+        "heading_size": "h0",
+        "description": "Découvrez comment stimuler la circulation lymphatique pour revitaliser votre peau, réduire les gonflements, et améliorer votre bien‑être global — que ce soit pour le visage ou le corps.",
+        "background_color": "#c8d5dc",
+        "heading_color": "#232323",
+        "text_color": "#232323",
+        "card_background": "#f5f0d0",
+        "card_border_color": "#232323",
+        "icon_color": "#232323",
+        "button_color": "#d4c478",
+        "button_text_color": "#232323",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "video_carousel_slider_6CaVFx": {
       "type": "video-carousel-slider",
       "blocks": {
@@ -1532,6 +1610,7 @@
   },
   "order": [
     "main",
+    "feature_14_T3Ghak",
     "video_carousel_slider_6CaVFx",
     "section_dEGUdG",
     "section_Nzh73z",
