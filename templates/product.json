@@ -493,7 +493,7 @@
         "equal_columns": true,
         "limit_details_width": false,
         "gap": 0,
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-4",
         "padding-block-start": 0,
         "padding-block-end": 0
       }
@@ -600,7 +600,7 @@
         "border_radius": 8,
         "icons_style": "arrow",
         "show_pagination": true,
-        "color_scheme": "",
+        "color_scheme": "scheme-4",
         "autoplay": true,
         "autoplay_speed": 5,
         "section_width": "page-width",
@@ -867,7 +867,7 @@
         "section_width": "page-width",
         "section_height": "medium",
         "section_height_custom": 50,
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-4",
         "background_media": "none",
         "video_position": "cover",
         "background_image_position": "cover",
@@ -998,7 +998,7 @@
         "section_width": "page-width",
         "section_height": "",
         "section_height_custom": 50,
-        "color_scheme": "",
+        "color_scheme": "scheme-4",
         "background_media": "none",
         "video_position": "cover",
         "background_image_position": "cover",
@@ -1128,7 +1128,7 @@
       "name": "t:names.marquee",
       "settings": {
         "movement_direction": "normal",
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-4",
         "padding-block-start": 30,
         "padding-block-end": 30,
         "gap_between_elements": 64
@@ -1249,7 +1249,7 @@
         "section_width": "page-width",
         "section_height": "",
         "section_height_custom": 50,
-        "color_scheme": "",
+        "color_scheme": "scheme-4",
         "background_media": "none",
         "video_position": "cover",
         "background_image_position": "cover",
@@ -1263,38 +1263,6 @@
         "gradient_direction": "to top",
         "padding-block-start": 40,
         "padding-block-end": 40
-      }
-    },
-    "section_UhNgJN": {
-      "type": "section",
-      "name": "Image banner",
-      "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "full-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-7",
-        "background_media": "image",
-        "video_position": "cover",
-        "background_image": "shopify://shop_images/ChatGPT_Image_Nov_23_2025_06_27_59_AM.png",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 10,
-        "padding-block-end": 0
       }
     },
     "customer_statistics_WhwPNJ": {
@@ -1330,7 +1298,7 @@
       "name": "Statistiques Clients",
       "settings": {
         "disclaimer": "*Basé sur une enquête auprès de 527 clients après 30 jours d'utilisation",
-        "color_scheme": "",
+        "color_scheme": "scheme-4",
         "section_width": "page-width",
         "padding-block-start": 50,
         "padding-block-end": 50
@@ -1393,7 +1361,7 @@
         "competitor_name": "Autres",
         "heading": "La raison pour laquelle les outils Gua Sha disparaissent",
         "description": "Parce que sculpter, dégonfler et faire briller la peau ne devrait pas signifier des soins coûteux ou des outils agressifs.",
-        "color_scheme": "",
+        "color_scheme": "scheme-4",
         "section_width": "page-width",
         "padding-block-start": 50,
         "padding-block-end": 50
@@ -1454,7 +1422,7 @@
       "settings": {
         "heading": "Écoutez nos clients",
         "subtitle": "Cette brosse a aidé des milliers de femmes à éliminer les poches du visage, sculpter leur mâchoire et obtenir un look rafraîchi à la maison.",
-        "color_scheme": "",
+        "color_scheme": "scheme-4",
         "section_width": "page-width",
         "padding-block-start": 50,
         "padding-block-end": 50
@@ -1488,7 +1456,7 @@
         "section_width": "page-width",
         "section_height": "",
         "section_height_custom": 50,
-        "color_scheme": "",
+        "color_scheme": "scheme-4",
         "background_media": "none",
         "video_position": "cover",
         "background_image_position": "cover",
@@ -1562,7 +1530,6 @@
     "section_Nzh73z",
     "marquee_r8WyKj",
     "section_pijjhJ",
-    "section_UhNgJN",
     "customer_statistics_WhwPNJ",
     "product_comparison_y7tNjk",
     "customer_reviews_MPUDVg",
