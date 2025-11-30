@@ -531,6 +531,7 @@
         "feature_T9HEEU": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/cream.svg",
             "icon_svg": "",
             "title": "Réduction des gonflements & rétention d’eau",
             "description": "Stimule le flux lymphatique pour drainer l’excès de fluides."
