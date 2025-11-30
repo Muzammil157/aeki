@@ -1446,6 +1446,7 @@
         "feature_yehkPR",
         "feature_iCVAM7"
       ],
+      "disabled": true,
       "name": "Comparaison de Produit",
       "settings": {
         "brand_name": "MAYKARDI",
