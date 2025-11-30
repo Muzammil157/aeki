@@ -462,13 +462,28 @@
                 "text_aD9DKF",
                 "group_hC9kAq"
               ]
+            },
+            "real3d_flipbook_flipbook_embed_FJieq6": {
+              "type": "shopify://apps/real3d-flipbook/blocks/flipbook_embed/9bc4190a-c044-49dc-9e4d-2525d8f37d61",
+              "settings": {
+                "flipbook": "lymphatic-brush-tutorial",
+                "pdfUrl": "",
+                "viewMode": "inline",
+                "linkType": "link",
+                "linkText": "",
+                "flipAnimation": "",
+                "backgroundColor": "",
+                "skin": "",
+                "layout": ""
+              }
             }
           },
           "block_order": [
             "group_4we3XL",
             "group_dTHcXb",
             "text_LbbLqQ",
-            "group_8ePU6U"
+            "group_8ePU6U",
+            "real3d_flipbook_flipbook_embed_FJieq6"
           ]
         }
       },
@@ -1488,6 +1503,56 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "1764481301d110db7f": {
+      "type": "_blocks",
+      "blocks": {
+        "real3d_flipbook_flipbook_embed_fPmCWf": {
+          "type": "shopify://apps/real3d-flipbook/blocks/flipbook_embed/9bc4190a-c044-49dc-9e4d-2525d8f37d61",
+          "settings": {
+            "flipbook": "",
+            "pdfUrl": "",
+            "viewMode": "inline",
+            "linkType": "link",
+            "linkText": "",
+            "flipAnimation": "",
+            "backgroundColor": "",
+            "skin": "",
+            "layout": ""
+          }
+        }
+      },
+      "block_order": [
+        "real3d_flipbook_flipbook_embed_fPmCWf"
+      ],
+      "disabled": true,
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
@@ -1501,6 +1566,7 @@
     "customer_statistics_WhwPNJ",
     "product_comparison_y7tNjk",
     "customer_reviews_MPUDVg",
-    "1763904735e682208c"
+    "1763904735e682208c",
+    "1764481301d110db7f"
   ]
 }
