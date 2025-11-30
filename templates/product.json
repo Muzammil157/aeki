@@ -522,6 +522,7 @@
         "feature_K6D4EY": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/massage.svg",
             "icon_svg": "",
             "title": "Soulagement des tensions & stress",
             "description": "Apaise le système nerveux et libère les tensions accumulées."
