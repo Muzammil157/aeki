@@ -540,6 +540,7 @@
         "feature_ygtpRN": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/blood_cea8cc86-312a-4e6c-adac-9dc4c334c2aa.svg",
             "icon_svg": "",
             "title": "Stimulation de la circulation & détox interne",
             "description": "Améliore la circulation et élimine les déchets cellulaires."
