@@ -287,11 +287,22 @@
                     }
                   },
                   "block_order": []
+                },
+                "custom_liquid_free_items": {
+                  "type": "custom-liquid",
+                  "settings": {
+                    "custom_liquid": "{% render 'free-items-box' %}",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  }
                 }
               },
               "block_order": [
                 "variant_picker_KePPVa",
-                "buy_buttons_6p8c63"
+                "buy_buttons_6p8c63",
+                "custom_liquid_free_items"
               ]
             },
             "text_LbbLqQ": {
