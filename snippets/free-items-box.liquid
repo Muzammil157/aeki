@@ -1,0 +1,168 @@
+{%- doc -%}
+  Renders a free items box showing items included with purchase.
+
+  @param {string} [title] - The title text
+  @param {string} [badge_text] - The badge text (e.g., "GRATUIT")
+  @param {string} [subtitle] - Subtitle text (e.g., "(1 article)")
+  @param {string} [ebook_name] - E-book item name
+  @param {string} [ebook_original_price] - Original price text
+  @param {string} [free_text] - Free text label
+{%- enddoc -%}
+
+<div class="free-items-box">
+  <div class="free-items-header">
+    <span class="free-items-title">{{ title | default: "Articles gratuits inclus dans toutes les commandes" }}</span>
+    <span class="free-items-badge">{{ badge_text | default: "GRATUIT" }}</span>
+  </div>
+
+  {% if subtitle != blank %}
+    <div class="free-items-subtitle">{{ subtitle }}</div>
+  {% endif %}
+
+  <div class="free-items-list">
+    <div class="free-item">
+      <div class="free-item-number">1</div>
+      <div class="free-item-content">
+        <span class="free-item-name">{{ ebook_name | default: "Le Guide de Sculpture du Visage en 2 Minutes" }}</span>
+        <span class="free-item-price">
+          <span class="free-item-original-price">{{ ebook_original_price | default: "19,99€" }}</span>
+          <span class="free-item-arrow">→</span>
+          <span class="free-item-free-price">{{ free_text | default: "GRATUIT" }}</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .free-items-box {
+    border: 2px solid rgba(var(--color-foreground-rgb, 0, 0, 0) / 0.15);
+    border-radius: 12px;
+    padding: 16px;
+    background: rgb(var(--color-background, 255, 255, 255));
+    margin: 20px 0;
+  }
+
+  .free-items-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 12px;
+  }
+
+  .free-items-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(var(--color-foreground, 0, 0, 0));
+    flex: 1;
+  }
+
+  .free-items-badge {
+    background: #ef4444;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+
+  .free-items-subtitle {
+    font-size: 0.8125rem;
+    color: rgba(var(--color-foreground, 0, 0, 0) / 0.6);
+    margin-bottom: 12px;
+  }
+
+  .free-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .free-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(var(--color-foreground, 0, 0, 0) / 0.02);
+    border-radius: 8px;
+  }
+
+  .free-item-number {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--color-foreground, 0, 0, 0) / 0.08);
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: rgb(var(--color-foreground, 0, 0, 0));
+  }
+
+  .free-item-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .free-item-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(var(--color-foreground, 0, 0, 0));
+    line-height: 1.4;
+  }
+
+  .free-item-price {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+  }
+
+  .free-item-original-price {
+    text-decoration: line-through;
+    color: rgba(var(--color-foreground, 0, 0, 0) / 0.5);
+  }
+
+  .free-item-arrow {
+    color: rgba(var(--color-foreground, 0, 0, 0) / 0.4);
+  }
+
+  .free-item-free-price {
+    font-weight: 700;
+    color: #16a34a;
+  }
+
+  @media screen and (max-width: 749px) {
+    .free-items-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .free-items-title {
+      font-size: 0.8125rem;
+    }
+
+    .free-item-number {
+      width: 28px;
+      height: 28px;
+      font-size: 0.8125rem;
+    }
+
+    .free-item-name {
+      font-size: 0.8125rem;
+    }
+
+    .free-item-price {
+      font-size: 0.75rem;
+    }
+  }
+</style>

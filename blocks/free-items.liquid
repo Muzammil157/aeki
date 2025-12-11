@@ -1,0 +1,123 @@
+{% liquid
+  assign block_settings = block.settings
+%}
+
+<div
+  class="free-items-block spacing-style"
+  style="{% render 'spacing-style', settings: block_settings %}"
+  {{ block.shopify_attributes }}
+>
+  {% render 'free-items-box',
+    title: block_settings.title,
+    badge_text: block_settings.badge_text,
+    subtitle: block_settings.subtitle,
+    ebook_name: block_settings.ebook_name,
+    ebook_original_price: block_settings.ebook_original_price,
+    free_text: block_settings.free_text
+  %}
+</div>
+
+{% stylesheet %}
+  .free-items-block {
+    width: 100%;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Free Items",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Articles gratuits inclus dans toutes les commandes"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "GRATUIT"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "(1 article)"
+    },
+    {
+      "type": "header",
+      "content": "E-book Settings"
+    },
+    {
+      "type": "text",
+      "id": "ebook_name",
+      "label": "E-book Name",
+      "default": "Le Guide de Sculpture du Visage en 2 Minutes"
+    },
+    {
+      "type": "text",
+      "id": "ebook_original_price",
+      "label": "Original Price",
+      "default": "19,99€"
+    },
+    {
+      "type": "text",
+      "id": "free_text",
+      "label": "Free Text",
+      "default": "GRATUIT"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Free Items",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
