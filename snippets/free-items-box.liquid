@@ -12,7 +12,10 @@
 <div class="free-items-box">
   <div class="free-items-header">
     <span class="free-items-title">{{ title | default: "Articles gratuits inclus dans toutes les commandes" }}</span>
-    <span class="free-items-badge">{{ badge_text | default: "GRATUIT" }}</span>
+    <div class="free-items-badge-wrapper">
+      <span class="free-items-badge-price">€11,99</span>
+      <span class="free-items-badge">{{ badge_text | default: "GRATUIT" }}</span>
+    </div>
   </div>
 
   {% if subtitle != blank %}
@@ -58,6 +61,20 @@
     flex: 1;
   }
 
+  .free-items-badge-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .free-items-badge-price {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: rgba(var(--color-foreground, 0, 0, 0) / 0.6);
+    text-decoration: line-through;
+  }
+
   .free-items-badge {
     background: #f3a8ad;
     color: white;
@@ -67,7 +84,6 @@
     border-radius: 20px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    flex-shrink: 0;
   }
 
   .free-items-subtitle {
@@ -105,11 +121,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(var(--color-foreground, 0, 0, 0) / 0.08);
+    background: #f3a8ad;
     border-radius: 6px;
     font-weight: 600;
     font-size: 1.125rem;
-    color: rgb(var(--color-foreground, 0, 0, 0));
+    color: #fff;
+
   }
 
   .free-item-content {
@@ -153,13 +170,27 @@
     }
 
     .free-items-header {
-      flex-direction: column;
-      align-items: flex-start;
+      flex-direction: row;
+      align-items: center;
       gap: 12px;
     }
 
     .free-items-title {
       font-size: 1rem;
+    }
+
+    .free-items-badge-wrapper {
+      flex-direction: row;
+      gap: 8px;
+    }
+
+    .free-items-badge-price {
+      font-size: 0.875rem;
+    }
+
+    .free-items-badge {
+      font-size: 0.875rem;
+      padding: 6px 14px;
     }
 
     .free-item {
